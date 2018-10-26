@@ -59,6 +59,8 @@ def prepareKaldiTestData(prefix, dest):
                         out.write(utt2spk_line)
                     with open(spk2uttFile, 'a+') as out:
                         out.write(utt2spk_line)
+            row_number=row_number+1
+    row_number=0
     print("========================Process CSV UTT=====================")
     print("csvpath: " + test_label_2nd_utt)
     with open(test_label_2nd_utt) as csvfile:
@@ -74,6 +76,7 @@ def prepareKaldiTestData(prefix, dest):
                     # print( "1. text: "+ text_line)
                     with open(textFile, 'a+') as out:
                         out.write(text_line)
+            row_number=row_number+1
 
     
 def prepareKaldiData(prefix, csvPath,audioPath, dest):
