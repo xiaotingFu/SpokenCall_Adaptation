@@ -19,8 +19,8 @@ train_audio_2nd=data_dir_2nd+'/train/TrainingDataWavfiles'
 test_audio_2nd=data_dir_2nd+'/test/audio'
 
 
-destination_train='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd/all'
-destination_test='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd_test'
+destination_train='/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/data/sharedTask2nd/all'
+destination_test='/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/data/sharedTask2nd_test'
 
 '''
 prepare necessary kaldi data for training
@@ -36,38 +36,40 @@ def prepareKaldiData(prefix, csvPath,audioPath, dest):
     print("csvpath: " + csvPath)
     print("audiopath: " + audioPath)
     print("destination: " + dest)
-
+    row_number=0
     with open(csvPath) as csvfile:
             readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
-                utt_id = prefix + '-' + str(row[0])
-                wave_file = str(row[2])
-                utterance = str(row[3])
+                if row_number!=0:
+                    utt_id = prefix + '-' + str(row[0])
+                    wave_file = str(row[2])
+                    utterance = str(row[3])
 
-                # Prepare text alignment file
-                # File: text
-                # utt_id    WORD1 WORD2 WORD3 WORD4 ...
-                text_line = utt_id +' '+ utterance+'\n'
-                print( "1. text: "+ text_line)
-                with open(textFile, 'a+') as out:
-                    out.write(text_line)
+                    # Prepare text alignment file
+                    # File: text
+                    # utt_id    WORD1 WORD2 WORD3 WORD4 ...
+                    text_line = utt_id +' '+ utterance+'\n'
+                    print( "1. text: "+ text_line)
+                    with open(textFile, 'a+') as out:
+                        out.write(text_line)
 
-                # File: wav.scp
-                # file_id    path/file
-                wavefile_path=audioPath+'/'+wave_file
-                wav_scp_line= utt_id + ' ' + wavefile_path +'\n'
-                print('2. wav.scp : ' + wav_scp_line)
-                with open(wav_scpFile, 'a+') as out:
-                    out.write(wav_scp_line)
-                    
-                # File: utt2spk
-                # utt_id    spkr
-                utt2spk_line = utt_id +' '+ utt_id+'\n'
-                print('3. utt2spk : ' + utt2spk_line)
-                with open(utt2spkFile, 'a+') as out:
-                    out.write(utt2spk_line)
-                with open(spk2uttFile, 'a+') as out:
-                    out.write(utt2spk_line)
+                    # File: wav.scp
+                    # file_id    path/file
+                    wavefile_path=audioPath+'/'+wave_file
+                    wav_scp_line= utt_id + ' ' + wavefile_path +'\n'
+                    print('2. wav.scp : ' + wav_scp_line)
+                    with open(wav_scpFile, 'a+') as out:
+                        out.write(wav_scp_line)
+                        
+                    # File: utt2spk
+                    # utt_id    spkr
+                    utt2spk_line = utt_id +' '+ utt_id+'\n'
+                    print('3. utt2spk : ' + utt2spk_line)
+                    with open(utt2spkFile, 'a+') as out:
+                        out.write(utt2spk_line)
+                    with open(spk2uttFile, 'a+') as out:
+                        out.write(utt2spk_line)
+                row_number=row_number+1
 
 
 def main():
