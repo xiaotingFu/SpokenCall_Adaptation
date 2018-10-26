@@ -37,6 +37,10 @@ def prepareKaldiTestData(prefix, dest):
     print("csvpath: " + test_label_2nd_wav)
     print("audiopath: " + audioPath)
     print("destination: " + dest)
+
+    print("========================Output file========================")
+    print("text: " + textFile)
+    print("wav.scp" + wav_scpFile)
     row_number=0
     with open(test_label_2nd_wav) as csvfile:
             readCSV = csv.reader(csvfile, delimiter='\t')
@@ -48,7 +52,6 @@ def prepareKaldiTestData(prefix, dest):
                     # file_id    path/file
                     wavefile_path=audioPath+'/'+wave_file
                     wav_scp_line= utt_id + ' ' + wavefile_path +'\n'
-                    # print('2. wav.scp : ' + wav_scp_line)
                     with open(wav_scpFile, 'a+') as out:
                         out.write(wav_scp_line)
                     
