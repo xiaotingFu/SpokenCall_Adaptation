@@ -33,6 +33,7 @@ def prepareKaldiTestData(prefix, dest):
     wav_scpFile =dest+'/wav.scp'
     utt2spkFile =dest+'/utt2spk'
     audioPath = test_audio_2nd
+
     print("========================Process CSV WAV=====================")
     print("csvpath: " + test_label_2nd_wav)
     print("audiopath: " + audioPath)
@@ -41,6 +42,7 @@ def prepareKaldiTestData(prefix, dest):
     print("========================Output file========================")
     print("text: " + textFile)
     print("wav.scp" + wav_scpFile)
+
     row_number=0
     with open(test_label_2nd_wav) as csvfile:
             readCSV = csv.reader(csvfile, delimiter='\t')
@@ -62,7 +64,7 @@ def prepareKaldiTestData(prefix, dest):
                         out.write(utt2spk_line)
                     with open(spk2uttFile, 'a+') as out:
                         out.write(utt2spk_line)
-            row_number=row_number+1
+                row_number=row_number+1
     row_number=0
     print("========================Process CSV UTT=====================")
     print("csvpath: " + test_label_2nd_utt)
@@ -75,11 +77,11 @@ def prepareKaldiTestData(prefix, dest):
                     # Prepare text alignment file
                     # File: text
                     # utt_id    WORD1 WORD2 WORD3 WORD4 ...
-                    text_line = utt_id +' '+ utterance+'\n'
+                    text_line = utt_id + ' ' + utterance + '\n'
                     # print( "1. text: "+ text_line)
                     with open(textFile, 'a+') as out:
                         out.write(text_line)
-            row_number=row_number+1
+                row_number=row_number+1
 
     
 def prepareKaldiData(prefix, csvPath,audioPath, dest):
@@ -135,7 +137,7 @@ def main():
     # prepareKaldiData('sc2',train_label_A_2nd, train_audio_2nd,destination_train)
     # prepareKaldiData('sc2',train_label_B_2nd, train_audio_2nd,destination_train)
     # prepareKaldiData('sc2',train_label_C_2nd, train_audio_2nd,destination_train)
-    prepareKaldiTestData('sc2',destination_test)
+    prepareKaldiTestData('sc2', destination_test)
     # prepareKaldiData('sc2',test_label_2nd, test_audio_2nd,destination_test)
 
 main()
