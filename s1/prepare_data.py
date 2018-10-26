@@ -1,8 +1,4 @@
 import csv
-# "5860"  "Sag: Ich bin aus der Türkei"   "5860.wav"      "i'm from turkey"       "correct"       "correct"
-# 0       1         2              3            4     5
-# utt-id prompt   wav-filename transcription label1 label2 
-
 # Directories
 data_dir_1st='/home/xfu7/data/sharedTask1st'
 data_dir_2nd='/home/xfu7/data/sharedTask2nd'
