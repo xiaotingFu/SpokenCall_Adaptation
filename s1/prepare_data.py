@@ -31,11 +31,15 @@ prepare necessary kaldi data for training
 '''
 def prepareKaldiData(prefix, csvPath,audioPath, dest):
     # Generating Kaldi format files for ASR training
-    textFile ='text'
-    wav_scpFile ='wav.scp'
-    utt2spkFile ='utt2spk'
-    spk2uttFile ='spk2utt'
+    textFile = dest+'/text'
+    wav_scpFile =dest+'/wav.scp'
+    utt2spkFile =dest+'/utt2spk'
+    spk2uttFile =dest+'/spk2utt'
     print("========================Process CSV=====================")
+    print("csvpath: " + csvPath)
+    print("audiopath: " + audioPath)
+    print("destination: " + dest)
+    
     with open(csvPath) as csvfile:
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
@@ -49,7 +53,7 @@ def prepareKaldiData(prefix, csvPath,audioPath, dest):
                 # utt_id    WORD1 WORD2 WORD3 WORD4 ...
                 text_line = utt_id +' '+ utterance+'\n'
                 with open(textFile, 'a') as out:
-                    out.write( text_line)
+                    out.write(text_line)
 
                 # File: wav.scp
                 # file_id    path/file
