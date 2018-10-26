@@ -42,3 +42,13 @@ SharedTask2nd
 
 ```
 
+Result
+```bash
+# wav file
+[xfu7@c74 sharedTask2nd]$ wc -l all/wav.scp
+12914 all/wav.scp
+
+# text file
+[xfu7@c74 sharedTask2nd]$ wc -l all/text
+12914 all/text
+```
