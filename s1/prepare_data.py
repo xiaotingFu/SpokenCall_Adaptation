@@ -32,6 +32,7 @@ def prepareKaldiTestData(prefix, dest):
     textFile = dest+'/text'
     wav_scpFile =dest+'/wav.scp'
     utt2spkFile =dest+'/utt2spk'
+    spk2uttFile =dest+'/spk2utt'
     audioPath = test_audio_2nd
 
     print("========================Process CSV WAV=====================")
