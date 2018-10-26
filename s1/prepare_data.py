@@ -23,8 +23,8 @@ train_audio_2nd=data_dir_2nd+'/train/TrainingDataWavfiles'
 test_audio_2nd=data_dir_2nd+'/test/audio'
 
 
-destination_train='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd/all/'
-destination_test='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd_test/'
+destination_train='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd/all'
+destination_test='/home/xfu7/kaldi/egs/st/s1/data/sharedTask2nd_test'
 
 '''
 prepare necessary kaldi data for training
@@ -39,9 +39,9 @@ def prepareKaldiData(prefix, csvPath,audioPath, dest):
     print("csvpath: " + csvPath)
     print("audiopath: " + audioPath)
     print("destination: " + dest)
-    
+
     with open(csvPath) as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
+            readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
                 utt_id = prefix + '-' + str(row[0])
                 wave_file = str(row[2])
