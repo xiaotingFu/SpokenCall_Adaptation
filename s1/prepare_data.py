@@ -59,6 +59,8 @@ def prepareKaldiTestData(prefix, dest):
                         out.write(utt2spk_line)
                     with open(spk2uttFile, 'a+') as out:
                         out.write(utt2spk_line)
+    print("========================Process CSV UTT=====================")
+    print("csvpath: " + test_label_2nd_utt)
     with open(test_label_2nd_utt) as csvfile:
             readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
@@ -127,7 +129,7 @@ def main():
     # prepareKaldiData('sc2',train_label_A_2nd, train_audio_2nd,destination_train)
     # prepareKaldiData('sc2',train_label_B_2nd, train_audio_2nd,destination_train)
     # prepareKaldiData('sc2',train_label_C_2nd, train_audio_2nd,destination_train)
-    prepareKaldiTestData('sc2',destination_test )
-    prepareKaldiData('sc2',test_label_2nd, test_audio_2nd,destination_test)
+    prepareKaldiTestData('sc2',destination_test)
+    # prepareKaldiData('sc2',test_label_2nd, test_audio_2nd,destination_test)
 
 main()
