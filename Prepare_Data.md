@@ -14,3 +14,7 @@ Traceback (most recent call last):
     utterance = str(row[3])
 IndexError: list index out of range
 ```
+
+
+# Install srilm for language model training
+follow instruction in kaldi/tools/install_srilm.sh
