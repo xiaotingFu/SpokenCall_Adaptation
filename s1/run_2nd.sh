@@ -147,26 +147,26 @@ fi
 
 ### parameters (part 2)
 # parameter for extract fmllr features
-gmmdir=${exp_dir}/tri4a
-data_fmllr=${exp_dir}/data-fmllr-tri4
-graph_dir=$gmmdir/graph_${LM}
-# parameter for DNN training
-nn_depth=6
-hid_dim=1024
-train_fmllr=${data_fmllr}/train${set}
-train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
-#test_fmllr=${data_fmllr}/sharedTask/test${set}
-test_fmllr=${data_fmllr}/sharedTask_Test
-dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
-# parameter for finetuning
-dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
-ali=${gmmdir}_ali
-feature_transform=${dbn_dir}/final.feature_transform
-dbn=${dbn_dir}/6.dbn
-# parameter for re-train DNN with ST
-dbn_re=$dir/final.dbn
-dir_re=${dir}_reST
-ali_re=${dir}_ali
+# gmmdir=${exp_dir}/tri4a
+# data_fmllr=${exp_dir}/data-fmllr-tri4
+# graph_dir=$gmmdir/graph_${LM}
+# # parameter for DNN training
+# nn_depth=6
+# hid_dim=1024
+# train_fmllr=${data_fmllr}/train${set}
+# train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
+# #test_fmllr=${data_fmllr}/sharedTask/test${set}
+# test_fmllr=${data_fmllr}/sharedTask_Test
+# dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
+# # parameter for finetuning
+# dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
+# ali=${gmmdir}_ali
+# feature_transform=${dbn_dir}/final.feature_transform
+# dbn=${dbn_dir}/6.dbn
+# # parameter for re-train DNN with ST
+# dbn_re=$dir/final.dbn
+# dir_re=${dir}_reST
+# ali_re=${dir}_ali
 
 if [ $step -le 7 ]; then
 ####################################################################################################
