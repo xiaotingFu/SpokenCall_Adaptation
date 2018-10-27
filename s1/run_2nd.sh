@@ -1,6 +1,7 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
+step=0
 
 . ./cmd.sh
 . ./path.sh
@@ -23,8 +24,9 @@ test=data/sharedTask2nd_test
 lang=data/lang_v1
 LM=st${set}.o3g.kn.pr1-7
 
-step=0
-
+# you might not want to do this for interactive shells.
+set -e
+echo "$step"
 if [ $step -le 0 ]; then
     ####################################################################################################
     echo '''                        Step 0 : train language model                                    '''
