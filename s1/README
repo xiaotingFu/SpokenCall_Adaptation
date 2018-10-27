@@ -1,0 +1,67 @@
+Spoken CALL Shared Task (Automatic Speech Recognition)
+
+Mengjie Qian, 2017-9-18
+
+
+0. Preparing your wroking directory
+You need to download and install Kaldi toolkit (http://kaldi-asr.org/doc/install.html). Do not forget to 
+compile CUDA. Most of the recipes we used are the same as the recipes in egs/wsj/s5/.
+
+$ mkdir -p egs/st/s1    # this is your working directory
+$ cp -r egs/wsj/s5/utils egs/wsj/s5/steps egs/wsj/s5/local egs/st/s1/
+$ cp egs/wsj/s5/cmd.sh egs/wsj/s5/path.sh egs/st/s1/
+
+Then copy my 'conf', 'data', 'exp' folders and file dnn2dbn.py to your working directory, copy files in 
+my 'steps', 'steps/nnet' and 'local' to your 'steps', 'steps/nnet' and 'local' respectively. Make sure these 
+files are executable.
+You need to modify 'cmd.sh' and 'path.sh' according to your own machine.
+
+
+1. Data Preparation
+The data used in the JJJ system are the shared task (st) data, the AMI corpus and the PF-STAR (German)
+corpus. The sampling rate for the st data is 8kHz, so we down-sampled all the training data to 8kHz 
+using sox toolkit.
+
+We use Kaldi to train the models, so we need to prepare data in Kaldi format for training and test.
+Details for preparing data can be found on website (http://kaldi-asr.org/doc/data_prep.html). Basically, 
+we need at least four files (wav.scp, text, utt2spk and spk2utt). If we want to decode for the test data 
+without the true transcirptions, we could prepare three files instead (wav.scp, utt2spk and spk2utt). 
+Please find some brief instructions below.
+wav.scp:
+       - format: <recording-id> <extended-filename>
+       - example: 3570 /home/mxq486/dataset/speechProcessing_test/3570.wav
+utt2spk:
+       - format: <utterance-id> <speaker-id>
+spk2utt:
+       - format: <speaker-id> <utterance-id1> <utterance-id2> ....
+       - how to create: utils/utt2spk_to_spk2utt.pl data/test/utt2spk > data/test/spk2utt
+text:
+       - format:  <utterance-id> <transcription of the sentence> 
+
+
+2. Feature Extration
+MFCC features are used to train the monophone model. We have provided the extracted features for these three 
+corpora we used (ST, AMI and PF-STAR_German). 
+Please remember to modify the *.scp files (feats.scp, cmvn.scp, wav.scp, data/cmvn*.scp, data/raw_mfcc*.scp) 
+according to your path.
+
+
+3. Building the ASR system
+Language model is provided, which is trained on all the ST development set transriptions. We give an example of 
+training language model in 'run_train.sh', you can follow the example to train your own language model.
+
+The procedure of training acoustic model is as follows:
+Monophone GMM-HMM training -> triphone GMM-HMM training -> applying MLLT and LDA -> speaker adaptation (fMLLR) -> 
+DNN model training with fMLLR features (including pretraining and finetuning) -> finetuning DNN with ST data only.
+
+The training procedure can be found in script 'run_train.sh'.
+
+
+4. Decoding
+If you want to decode your own data with our trained model, you can find the procedure in script 'run_decode.sh'.
+
+
+The details and results of our system can be found in this paper (http://www.slate2017.org/papers/SLaTE_2017_paper_37.pdf).
+Please note that your results may be a little different (shouldn't be much) from ours due to different versions of Kaldi.
+If you have any questions about our system or about these recipes, please feel free to ask.
+
