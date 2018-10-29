@@ -27,8 +27,9 @@ data_dir_sub=data/sharedTask/all
 test=data/sharedTask_test
 lang=data/lang_v1
 LM=st${set}.o3g.kn.pr1-7
+step=2
 
-
+if [ $step -le 0 ]; then
 ####################################################################################################
 echo '''                        Step 0 : train language model                                    '''
 ####################################################################################################
@@ -40,8 +41,9 @@ local/sharedTask_train_lms.sh data/sharedTask/all/text data/sharedTask/all/text 
 prune-lm --threshold=1e-7 data/local/lm_st${set}.o3g/st${set}.o3g.kn.gz /dev/stdout | gzip -c \
     > data/local/lm_st${set}.o3g/$LM.gz
 utils/format_lm.sh data/lang_v1 data/local/lm_st${set}.o3g/$LM.gz data/local/dict_v1/lexicon.txt data/lang_$LM
+fi
 
-
+if [ $step -le 1 ]; then
 ####################################################################################################
 echo '''                        Step 1 : prepare data and extract features                       '''
 ####################################################################################################
@@ -52,8 +54,10 @@ steps/compute_cmvn_stats.sh $data_dir $data_dir/log $data_dir/data
 # extract features for test data
 steps/make_mfcc.sh --nj 1 --cmd "$train_cmd" $test $test/log $test/data
 steps/compute_cmvn_stats.sh $test $test/log $test/data
+fi
 
 
+if [ $step -le 2 ]; then
 ####################################################################################################
 echo '''                        Step 2 : train monophone model                                   '''
 ####################################################################################################
@@ -71,7 +75,9 @@ acwt=0.06
 (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
     $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
 
+fi
 
+if [ $step -le 3 ]; then
 ####################################################################################################
 echo '''                        Step 3 : tri1                                                    '''
 ####################################################################################################
@@ -86,8 +92,9 @@ $highmem_cmd $graph_dir/mkgraph.log \
 acwt=0.06
 (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
     $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
+fi
 
-
+if [ $step -le 4 ]; then
 ####################################################################################################
 echo '''                        Step 4 : tri2                                                    '''
 ####################################################################################################
@@ -103,7 +110,9 @@ acwt=0.06
 ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
     $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
 
+fi
 
+if [ $step -le 5 ]; then
 ####################################################################################################
 echo '''                        Step 5 : tri3, MLLT+LDA                                          '''
 ####################################################################################################
@@ -121,8 +130,10 @@ $highmem_cmd $graph_dir/mkgraph.log \
 acwt=0.06
 ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
     $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
+fi
 
 
+if [ $step -le 6 ]; then
 ####################################################################################################
 echo '''                        Step 6 : tri4, MLLT+LDA+SAT                                      '''
 ####################################################################################################
@@ -138,8 +149,9 @@ $highmem_cmd $graph_dir/mkgraph.log \
 acwt=0.05
 steps/decode_fmllr.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
     $graph_dir $test ${exp_dir}/tri4a/decode_st.test_${LM}_acwt$acwt
+fi
 
-
+if [ $step -le 7 ]; then
 ### parameters (part 2)
 # parameter for extract fmllr features
 gmmdir=${exp_dir}/tri4a
@@ -178,8 +190,9 @@ cp ${data_dir}/text ${train_fmllr}/
 
 # split the data : 90% train 10% cross-validation (held-out)
 utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
+fi
 
-
+if [ $step -le 8 ]; then
 ####################################################################################################
 echo '''                        Step 8 : train dnn model with tri4a gmm model                    '''
 ####################################################################################################
@@ -194,8 +207,9 @@ $cuda_cmd $dir/log/train_nnet.log \
 acwt=0.05
 ( steps/nnet/decode.sh --nj $nj_decode  --use-gpu "yes" --cmd "$cuda_cmd" --config conf/decode_dnn.conf \
   --acwt $acwt $graph_dir $test_fmllr ${dir}/decode_st.test_${LM}_acwt$acwt )&
+fi
 
-
+if [ $step -le 9 ]; then
 ####################################################################################################
 echo '''                        Step 9 : align dnn model and prepare for retraining model        '''
 ####################################################################################################
@@ -210,8 +224,9 @@ nnet-copy $dir/final_txt.dbn $dir/final.dbn
 # use only st data to finetune DNN, so split fmllr features to a st subset
 # we can also make fmllr features directly using $data_dir_sub
 utils/subset_data_dir.sh --utt-list data/sharedTask/utt_ids/utt${set}_train $train_fmllr $train_fmllr_sub
+fi
 
-
+if [ $step -le 10 ]; then
 ####################################################################################################
 echo '''                        Step 10 : finetune dnn4 with only st data                        '''
 ####################################################################################################
@@ -222,6 +237,6 @@ $cuda_cmd ${dir_re}/log/train_nnet.log \
 acwt=0.05
 ( steps/nnet/decode.sh --nj $nj_decode  --use-gpu "yes" --cmd "$cuda_cmd" --config conf/decode_dnn.conf \
   --acwt $acwt $graph_dir $test_fmllr ${dir_re}/decode_st.test_${LM}_acwt$acwt )&
-
+fi
 
 
