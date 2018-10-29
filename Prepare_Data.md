@@ -45,7 +45,6 @@ echo "$count"
 # 1374 videos intotal
 
 for dir in */; do
-    
     for wavfile in $dir/audio/*.wav; do
         # ls -lah $wavfile
         # ((count=count+1))
