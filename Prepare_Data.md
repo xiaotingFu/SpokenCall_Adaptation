@@ -16,5 +16,10 @@ IndexError: list index out of range
 ```
 
 
-# Install srilm for language model training
+## Install srilm for language model training
 follow instruction in kaldi/tools/install_srilm.sh
+
+
+## Step 1 : prepare data and extract features
+steps/make_mfcc.sh --nj 1 --cmd queue.pl /log /data
+mkdir: cannot create directory '/log': Permission denied

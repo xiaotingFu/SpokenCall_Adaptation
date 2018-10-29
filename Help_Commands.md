@@ -6,7 +6,11 @@ But I don't like to use vim!
 ## Git
 ### Create new branch
 
-
+## tar command
+```
+# untar a tgz file into a certain path
+tar zxvf <filename>.tgz -C /your/path
+```
 
 ### Save username and password in git
 ```bash

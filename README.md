@@ -52,3 +52,14 @@ Result
 [xfu7@c74 sharedTask2nd]$ wc -l all/text
 12914 all/text
 ```
+
+```bash
+# data_dir_sub
+[xfu7@c44 sharedTask]$ wc -l all/wav.scp
+5222 all/wav.scp
+
+# data_dir
+[xfu7@c44 sharedTask]$ wc -l st_ihm20_psgAll/train10/wav.scp
+5531 st_ihm20_psgAll/train10/wav.scp
+```
+

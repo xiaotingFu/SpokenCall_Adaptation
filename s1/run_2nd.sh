@@ -1,7 +1,7 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
-step=0
+step=1
 
 . ./cmd.sh
 . ./path.sh
@@ -18,7 +18,7 @@ numGaussTri3=80000
 numLeavesTri4=5000
 numGaussTri4=80000
 exp_dir=exp${set}                        # directory for saving models and results
-# data_dir=data/sharedTask/st_ihm20_psgAll/train${set}
+data_dir=data/sharedTask/st_ihm20_psgAll/train${set}
 data_dir_sub=data/sharedTask2nd/all
 test=data/sharedTask2nd_test
 lang=data/lang_v1
