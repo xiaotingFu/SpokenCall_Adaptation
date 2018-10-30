@@ -101,7 +101,7 @@ def prepareKaldiData(prefix, csvPath,audioPath, dest):
             readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
                 if row_number!=0:
-                    utt_id = prefix + '-' + str(row[0])
+                    utt_id = prefix + '_' + str(row[0])
                     wave_file = str(row[2])
                     utterance = str(row[3])
 
