@@ -121,11 +121,12 @@ for item in $array; do  wc -l sharedTask2nd/ihm20/$item; done
 # grab 50% of the utterance and build ihm50
 ```
 
-
-[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/text >> text
-[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/utt2spk >> utt2spk
-[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/spk2utt >> spk2utt
-[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/wav.scp >> wav.scp
+```bash
+cd data/sharedTask2nd/st_ihm_all
+cat ../../ihm/all/text >> text
+cat ../../ihm/all/utt2spk >> utt2spk
+cat ../../ihm/all/spk2utt >> spk2utt
+cat ../../ihm/all/wav.scp >> wav.scp
 [xfu7@c47 st_ihm_all]$ cat ../all/text >> text
 [xfu7@c47 st_ihm_all]$ cat ../all/wav.scp >> wav.scp
 [xfu7@c47 st_ihm_all]$ cat ../all/utt2spk >> utt2spk
@@ -134,3 +135,37 @@ for item in $array; do  wc -l sharedTask2nd/ihm20/$item; done
 [xfu7@c47 s1]$ utils/fix_data_dir.sh data/sharedTask2nd/st_ihm_all
 fix_data_dir.sh: kept 12914 utterances out of 147157
 fix_data_dir.sh: old files are kept in data/sharedTask2nd/st_ihm_all/.backup
+
+! awk '{print $1}' $1 | sort | uniq | cmp -s - <(awk '{print $1}' $1)
+
+$1=data/sharedTask2nd/st_ihm_all/utt2spk
+function check_sorted_and_uniq {
+  ! awk '{print $1}' $1 | sort | uniq | cmp -s - <(awk '{print $1}' $1) && \
+    echo "$0: file $1 is not in sorted order or has duplicates" && exit 1;
+}
+
+function partial_diff {
+  diff $1 $2 | head -n 6
+  echo "..."
+  diff $1 $2 | tail -n 6
+  n1=`cat $1 | wc -l`
+  n2=`cat $2 | wc -l`
+  echo "[Lengths are $1=$n1 versus $2=$n2]"
+}
+
+check_sorted_and_uniq $data/utt2spk
+
+if ! $no_spk_sort; then
+  ! cat $data/utt2spk | sort -k2 | cmp -s - $data/utt2spk && \
+     echo "$0: utt2spk is not in sorted order when sorted first on speaker-id " && \
+     echo "(fix this by making speaker-ids prefixes of utt-ids)" && exit 1;
+fi
+! awk '{print $1}' $1 | sort | uniq | cmp -s - <(awk '{print $1}' $1)
+
+cat data/sharedTask2nd/st_ihm_all/utt2spk | sort | cmp - data/sharedTask2nd/st_ihm_all/utt2spk
+
+utils/validate_data_dir.sh data/sharedTask2nd/st_ihm_all
+```
+
+
+utils/utt2spk_to_spk2utt.pl data/sharedTask2nd/st_ihm_all/utt2spk > data/sharedTask2nd/st_ihm_all/spk2utt
