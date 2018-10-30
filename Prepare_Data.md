@@ -169,3 +169,18 @@ utils/validate_data_dir.sh data/sharedTask2nd/st_ihm_all
 
 
 utils/utt2spk_to_spk2utt.pl data/sharedTask2nd/st_ihm_all/utt2spk > data/sharedTask2nd/st_ihm_all/spk2utt
+
+[xfu7@c47 s1]$ time ./run_train_st.sh >> 1029.log
+/run_train_st.sh: line 72: exp10/mono/graph_st10.o3g.kn.pr1-7/mkgraph.log: No such file or directory
+
+real    49m6.402s
+user    441m37.960s
+sys     3m7.969s
+
+
+[xfu7@c47 s1]$ time ./run_train_st.sh > log_train_st
+./run_train_st.sh: line 242: syntax error: unexpected end of file
+
+real    34m3.523s
+user    435m42.747s
+sys     2m59.304s

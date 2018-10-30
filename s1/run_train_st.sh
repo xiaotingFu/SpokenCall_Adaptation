@@ -85,13 +85,13 @@ if [ $step -le 3 ]; then
     steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/tri1 ${exp_dir}/tri1_ali
 
     # decode, we can skip decoding
-#     graph_dir=${exp_dir}/tri1/graph_${LM}
-#     $highmem_cmd $graph_dir/mkgraph.log \
-#         utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri1 $graph_dir
-#     acwt=0.06
-#     (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-#         $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
-# fi
+    # graph_dir=${exp_dir}/tri1/graph_${LM}
+    # $highmem_cmd $graph_dir/mkgraph.log \
+    #     utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri1 $graph_dir
+    # acwt=0.06
+    # (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+    #     $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
+fi
 
 if [ $step -le 4 ]; then
     ####################################################################################################
@@ -148,46 +148,43 @@ if [ $step -le 6 ]; then
         $graph_dir $test ${exp_dir}/tri4a/decode_st.test_${LM}_acwt$acwt
 fi
 
-
-
 if [ $step == 7 ]; then
-## parameters (part 2)
-parameter for extract fmllr features
-gmmdir=${exp_dir}/tri4a
-data_fmllr=${exp_dir}/data-fmllr-tri4
-graph_dir=$gmmdir/graph_${LM}
-# parameter for DNN training
-nn_depth=6
-hid_dim=1024
-train_fmllr=${data_fmllr}/train${set}
-train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
-#test_fmllr=${data_fmllr}/sharedTask/test${set}
-test_fmllr=${data_fmllr}/sharedTask_Test
-dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
-# parameter for finetuning
-dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
-ali=${gmmdir}_ali
-feature_transform=${dbn_dir}/final.feature_transform
-dbn=${dbn_dir}/6.dbn
-# parameter for re-train DNN with ST
-dbn_re=$dir/final.dbn
-dir_re=${dir}_reST
-ali_re=${dir}_ali
-####################################################################################################
-echo '''                        Step 7 : extract fmllr features                                  '''
-####################################################################################################
-# test set
-steps/nnet/make_fmllr_feats.sh --nj $nj_decode --cmd "$train_cmd" \
-     --transform-dir $gmmdir/decode_st.test_${LM}_acwt0.05 \
-     ${test_fmllr} $test $gmmdir ${test_fmllr}/log ${test_fmllr}/data
-# gmm training set
-steps/nnet/make_fmllr_feats.sh --nj $nj --cmd "$train_cmd" --transform-dir ${gmmdir}_ali \
-     ${train_fmllr} $data_dir $gmmdir ${train_fmllr}/log ${train_fmllr}/data
-cp ${data_dir}/text ${train_fmllr}/
+    ## parameters (part 2)
+    parameter for extract fmllr features
+    gmmdir=${exp_dir}/tri4a
+    data_fmllr=${exp_dir}/data-fmllr-tri4
+    graph_dir=$gmmdir/graph_${LM}
+    # parameter for DNN training
+    nn_depth=6
+    hid_dim=1024
+    train_fmllr=${data_fmllr}/train${set}
+    train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
+    #test_fmllr=${data_fmllr}/sharedTask/test${set}
+    test_fmllr=${data_fmllr}/sharedTask_Test
+    dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
+    # parameter for finetuning
+    dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
+    ali=${gmmdir}_ali
+    feature_transform=${dbn_dir}/final.feature_transform
+    dbn=${dbn_dir}/6.dbn
+    # parameter for re-train DNN with ST
+    dbn_re=$dir/final.dbn
+    dir_re=${dir}_reST
+    ali_re=${dir}_ali
+    ####################################################################################################
+    echo '''                        Step 7 : extract fmllr features                                  '''
+    ####################################################################################################
+    # test set
+    steps/nnet/make_fmllr_feats.sh --nj $nj_decode --cmd "$train_cmd" \
+        --transform-dir $gmmdir/decode_st.test_${LM}_acwt0.05 \
+        ${test_fmllr} $test $gmmdir ${test_fmllr}/log ${test_fmllr}/data
+    # gmm training set
+    steps/nnet/make_fmllr_feats.sh --nj $nj --cmd "$train_cmd" --transform-dir ${gmmdir}_ali \
+        ${train_fmllr} $data_dir $gmmdir ${train_fmllr}/log ${train_fmllr}/data
+    cp ${data_dir}/text ${train_fmllr}/
 
-# split the data : 90% train 10% cross-validation (held-out)
-utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
-
+    # split the data : 90% train 10% cross-validation (held-out)
+    utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
 fi
 
 if [ $step == 8 ]; then
