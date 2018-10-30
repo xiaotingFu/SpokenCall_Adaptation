@@ -18,7 +18,8 @@ numGaussTri3=80000
 numLeavesTri4=5000
 numGaussTri4=80000
 exp_dir=exp${set}                        # directory for saving models and results
-data_dir=data/sharedTask/st_ihm20_psgAll/train${set}
+data_dir=data/sharedTask2nd/st_ihm_all/train${set}
+data_dir=data/sharedTask2nd/st_ihm20/train${set}
 data_dir_sub=data/sharedTask2nd/all
 test=data/sharedTask2nd_test
 lang=data/lang_v1
@@ -41,7 +42,7 @@ if [ $step -le 0 ]; then
     utils/format_lm.sh data/lang_v1 data/local/lm_st${set}.o3g/$LM.gz data/local/dict_v1/lexicon.txt data/lang_$LM
 fi
 
-if [ $step -le 1 ]; then
+if [ $step -e 1 ]; then
     ####################################################################################################
     echo '''                        Step 1 : prepare data and extract features                       '''
     ####################################################################################################
@@ -54,7 +55,7 @@ if [ $step -le 1 ]; then
     steps/compute_cmvn_stats.sh $test $test/log $test/data
 fi
 
-if [ $step -le 2 ]; then
+if [ $step -e 2 ]; then
     ####################################################################################################
     echo '''                        Step 2 : train monophone model                                   '''
     ####################################################################################################
@@ -73,7 +74,7 @@ if [ $step -le 2 ]; then
         $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -le 3 ]; then
+if [ $step -e 3 ]; then
     ####################################################################################################
     echo '''                        Step 3 : tri1                                                    '''
     ####################################################################################################
@@ -90,7 +91,7 @@ if [ $step -le 3 ]; then
         $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -le 4 ]; then
+if [ $step -e 4 ]; then
     ####################################################################################################
     echo '''                        Step 4 : tri2                                                    '''
     ####################################################################################################
@@ -107,7 +108,7 @@ if [ $step -le 4 ]; then
         $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -le 5 ]; then
+if [ $step -e 5 ]; then
     ####################################################################################################
     echo '''                        Step 5 : tri3, MLLT+LDA                                          '''
     ####################################################################################################
@@ -127,7 +128,7 @@ if [ $step -le 5 ]; then
         $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -le 6 ]; then
+if [ $step -e 6 ]; then
     ####################################################################################################
     echo '''                        Step 6 : tri4, MLLT+LDA+SAT                                      '''
     ####################################################################################################
@@ -145,30 +146,31 @@ if [ $step -le 6 ]; then
         $graph_dir $test ${exp_dir}/tri4a/decode_st.test_${LM}_acwt$acwt
 fi
 
-### parameters (part 2)
-# parameter for extract fmllr features
-# gmmdir=${exp_dir}/tri4a
-# data_fmllr=${exp_dir}/data-fmllr-tri4
-# graph_dir=$gmmdir/graph_${LM}
-# # parameter for DNN training
-# nn_depth=6
-# hid_dim=1024
-# train_fmllr=${data_fmllr}/train${set}
-# train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
-# #test_fmllr=${data_fmllr}/sharedTask/test${set}
-# test_fmllr=${data_fmllr}/sharedTask_Test
-# dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
-# # parameter for finetuning
-# dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
-# ali=${gmmdir}_ali
-# feature_transform=${dbn_dir}/final.feature_transform
-# dbn=${dbn_dir}/6.dbn
-# # parameter for re-train DNN with ST
-# dbn_re=$dir/final.dbn
-# dir_re=${dir}_reST
-# ali_re=${dir}_ali
 
-if [ $step -le 7 ]; then
+
+if [ $step -e 7 ]; then
+## parameters (part 2)
+parameter for extract fmllr features
+gmmdir=${exp_dir}/tri4a
+data_fmllr=${exp_dir}/data-fmllr-tri4
+graph_dir=$gmmdir/graph_${LM}
+# parameter for DNN training
+nn_depth=6
+hid_dim=1024
+train_fmllr=${data_fmllr}/train${set}
+train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
+#test_fmllr=${data_fmllr}/sharedTask/test${set}
+test_fmllr=${data_fmllr}/sharedTask_Test
+dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
+# parameter for finetuning
+dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
+ali=${gmmdir}_ali
+feature_transform=${dbn_dir}/final.feature_transform
+dbn=${dbn_dir}/6.dbn
+# parameter for re-train DNN with ST
+dbn_re=$dir/final.dbn
+dir_re=${dir}_reST
+ali_re=${dir}_ali
 ####################################################################################################
 echo '''                        Step 7 : extract fmllr features                                  '''
 ####################################################################################################
@@ -185,7 +187,7 @@ cp ${data_dir}/text ${train_fmllr}/
 utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
 fi
 
-if [ $step -le 8 ]; then
+if [ $step -e 8 ]; then
     ####################################################################################################
     echo '''                        Step 8 : train dnn model with tri4a gmm model                    '''
     ####################################################################################################
@@ -203,7 +205,7 @@ if [ $step -le 8 ]; then
 fi
 
 
-if [ $step -le 9 ]; then
+if [ $step -e 9 ]; then
     ####################################################################################################
     echo '''                        Step 9 : align dnn model and prepare for retraining model        '''
     ####################################################################################################
@@ -220,7 +222,7 @@ if [ $step -le 9 ]; then
     utils/subset_data_dir.sh --utt-list data/sharedTask/utt_ids/utt${set}_train $train_fmllr $train_fmllr_sub
 fi
 
-if [ $step -le 10 ]; then
+if [ $step -e 10 ]; then
     ####################################################################################################
     echo '''                        Step 10 : finetune dnn4 with only st data                        '''
     ####################################################################################################

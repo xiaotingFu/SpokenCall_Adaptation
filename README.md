@@ -44,13 +44,31 @@ SharedTask2nd
 
 Result
 ```bash
+# Train Set
+[xfu7@c44 sharedTask2nd]$ ls all
+spk2utt  text  utt2spk  wav.scp
+
 # wav file
 [xfu7@c74 sharedTask2nd]$ wc -l all/wav.scp
 12914 all/wav.scp
 
-# text file
-[xfu7@c74 sharedTask2nd]$ wc -l all/text
-12914 all/text
+# tail
+[xfu7@c44 sharedTask2nd_test]$ tail wav.scp
+sc2-41322 /home/xfu7/data/sharedTask2nd/test/audio/41322.wav
+sc2-41323 /home/xfu7/data/sharedTask2nd/test/audio/41323.wav
+sc2-41327 /home/xfu7/data/sharedTask2nd/test/audio/41327.wav
+sc2-41328 /home/xfu7/data/sharedTask2nd/test/audio/41328.wav
+sc2-41329 /home/xfu7/data/sharedTask2nd/test/audio/41329.wav
+sc2-41330 /home/xfu7/data/sharedTask2nd/test/audio/41330.wav
+sc2-41331 /home/xfu7/data/sharedTask2nd/test/audio/41331.wav
+sc2-41334 /home/xfu7/data/sharedTask2nd/test/audio/41334.wav
+sc2-41337 /home/xfu7/data/sharedTask2nd/test/audio/41337.wav
+sc2-41338 /home/xfu7/data/sharedTask2nd/test/audio/41338.wav
+
+# Test set
+[xfu7@c44 sharedTask2nd_test]$ wc -l wav.scp
+1001 wav.scp
+
 ```
 
 ```bash

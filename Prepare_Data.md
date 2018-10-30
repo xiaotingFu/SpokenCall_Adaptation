@@ -59,3 +59,64 @@ done
 
 Failed to open file /home/mxq486/kaldi-trunk/egs/ami/s5/data/sharedTask/all/data/raw_mfcc_all.1.ark
 
+## Prepare AMI Corpus by Running Kaldi/egs/ami/s5b
+
+To prepare the AMI Corpus for training in the setup we need to prepare data.
+Here we use the data preparation scripts provided by Kaldi to prepare the AMI corpus.
+
+This corpus require Fisher Transcript which is not avaliable in public, therefore I skip this part as described in the [README_AMI_s5b](/README_AMI_s5b) file.
+
+I later run the following command to generate the data files for training and stop before mfcc feature extraction step in this setting.
+
+```
+# I only want to prepare ihm for my setup
+./run.sh --mic ihm
+```
+
+The result of this script generate data in /s5b/data/ihm directory:
+```
+[xfu7@c44 ihm]$ ls
+dev  dev_orig  eval  eval_orig  train  train_orig
+
+[xfu7@c44 data]$ wc -l  ihm/train/text
+108502 ihm/train/text
+
+for dir in */; do wc -l $dir/text; done
+```
+
+Results are shown as follws:
+```
+[xfu7@c44 ihm]$ for dir in */; do wc -l $dir/utt2spk; done
+13098 dev//text
+13098 dev_orig//text
+12643 eval//text
+12643 eval_orig//text
+108502 train//text
+108502 train_orig//text
+```
+
+Now I need to copy this file into the SpokenCALL_Adaptation directory:
+```
+cp -rf ihm/ /home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/data/ihm
+```
+
+
+## Create Data Augumentation Corpus
+```bash
+# Final AMI-IHM Utterance number
+[xfu7@c47 ihm]$ wc -l all/text
+134243 all/text
+
+# grab 20% of the utterance and build ihm20
+#!/bin/bash
+array=("text" "wav.scp" "segments" "utt2spk" "spk2utt")
+for item in ${array[*]}; do
+    touch sharedTask2nd/ihm20/$item
+    
+    cat ihm/all/$item | head -26848 > sharedTask2nd/ihm20/$item
+    wc -l sharedTask2nd/ihm20/$item
+done
+
+for item in $array; do  wc -l sharedTask2nd/ihm20/$item; done
+# grab 50% of the utterance and build ihm50
+```
