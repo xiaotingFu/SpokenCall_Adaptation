@@ -42,7 +42,7 @@ if [ $step -le 0 ]; then
     utils/format_lm.sh data/lang_v1 data/local/lm_st${set}.o3g/$LM.gz data/local/dict_v1/lexicon.txt data/lang_$LM
 fi
 
-if [ $step -e 1 ]; then
+if [ $step == 1 ]; then
     ####################################################################################################
     echo '''                        Step 1 : prepare data and extract features                       '''
     ####################################################################################################
@@ -55,7 +55,7 @@ if [ $step -e 1 ]; then
     steps/compute_cmvn_stats.sh $test $test/log $test/data
 fi
 
-if [ $step -e 2 ]; then
+if [ $step == 2 ]; then
     ####################################################################################################
     echo '''                        Step 2 : train monophone model                                   '''
     ####################################################################################################
@@ -74,7 +74,7 @@ if [ $step -e 2 ]; then
         $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -e 3 ]; then
+if [ $step == 3 ]; then
     ####################################################################################################
     echo '''                        Step 3 : tri1                                                    '''
     ####################################################################################################
@@ -91,7 +91,7 @@ if [ $step -e 3 ]; then
         $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -e 4 ]; then
+if [ $step == 4 ]; then
     ####################################################################################################
     echo '''                        Step 4 : tri2                                                    '''
     ####################################################################################################
@@ -108,7 +108,7 @@ if [ $step -e 4 ]; then
         $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -e 5 ]; then
+if [ $step == 5 ]; then
     ####################################################################################################
     echo '''                        Step 5 : tri3, MLLT+LDA                                          '''
     ####################################################################################################
@@ -128,7 +128,7 @@ if [ $step -e 5 ]; then
         $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step -e 6 ]; then
+if [ $step == 6 ]; then
     ####################################################################################################
     echo '''                        Step 6 : tri4, MLLT+LDA+SAT                                      '''
     ####################################################################################################
@@ -148,7 +148,7 @@ fi
 
 
 
-if [ $step -e 7 ]; then
+if [ $step == 7 ]; then
 ## parameters (part 2)
 parameter for extract fmllr features
 gmmdir=${exp_dir}/tri4a
@@ -187,7 +187,7 @@ cp ${data_dir}/text ${train_fmllr}/
 utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
 fi
 
-if [ $step -e 8 ]; then
+if [ $step == 8 ]; then
     ####################################################################################################
     echo '''                        Step 8 : train dnn model with tri4a gmm model                    '''
     ####################################################################################################
@@ -205,7 +205,7 @@ if [ $step -e 8 ]; then
 fi
 
 
-if [ $step -e 9 ]; then
+if [ $step == 9 ]; then
     ####################################################################################################
     echo '''                        Step 9 : align dnn model and prepare for retraining model        '''
     ####################################################################################################
@@ -222,7 +222,7 @@ if [ $step -e 9 ]; then
     utils/subset_data_dir.sh --utt-list data/sharedTask/utt_ids/utt${set}_train $train_fmllr $train_fmllr_sub
 fi
 
-if [ $step -e 10 ]; then
+if [ $step == 10 ]; then
     ####################################################################################################
     echo '''                        Step 10 : finetune dnn4 with only st data                        '''
     ####################################################################################################
