@@ -68,12 +68,12 @@ if [ $step -le 2 ]; then
     steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/mono ${exp_dir}/mono_ali
 
     # decode, we can skip this if we do not want the decoding result for monophone model
-    graph_dir=${exp_dir}/mono/graph_${LM}
-    $highmem_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh --mono data/lang_${LM} ${exp_dir}/mono $graph_dir
-    acwt=0.06
-    (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-        $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
+    # graph_dir=${exp_dir}/mono/graph_${LM}
+    # $highmem_cmd $graph_dir/mkgraph.log \
+    #     utils/mkgraph.sh --mono data/lang_${LM} ${exp_dir}/mono $graph_dir
+    # acwt=0.06
+    # (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+    #     $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
 fi
 
 if [ $step -le 3 ]; then
