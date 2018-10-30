@@ -1,7 +1,7 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
-step=3
+step=2
 
 . ./cmd.sh
 . ./path.sh
