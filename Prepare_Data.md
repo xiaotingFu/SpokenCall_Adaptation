@@ -112,7 +112,7 @@ cp -rf ihm/ /home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/data/ihm
 array=("text" "wav.scp" "segments" "utt2spk" "spk2utt")
 for item in ${array[*]}; do
     touch sharedTask2nd/ihm20/$item
-    
+
     cat ihm/all/$item | head -26848 > sharedTask2nd/ihm20/$item
     wc -l sharedTask2nd/ihm20/$item
 done
@@ -120,3 +120,17 @@ done
 for item in $array; do  wc -l sharedTask2nd/ihm20/$item; done
 # grab 50% of the utterance and build ihm50
 ```
+
+
+[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/text >> text
+[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/utt2spk >> utt2spk
+[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/spk2utt >> spk2utt
+[xfu7@c47 st_ihm_all]$ cat ../../ihm/all/wav.scp >> wav.scp
+[xfu7@c47 st_ihm_all]$ cat ../all/text >> text
+[xfu7@c47 st_ihm_all]$ cat ../all/wav.scp >> wav.scp
+[xfu7@c47 st_ihm_all]$ cat ../all/utt2spk >> utt2spk
+[xfu7@c47 st_ihm_all]$ cat ../all/spk2utt >> spk2utt
+
+[xfu7@c47 s1]$ utils/fix_data_dir.sh data/sharedTask2nd/st_ihm_all
+fix_data_dir.sh: kept 12914 utterances out of 147157
+fix_data_dir.sh: old files are kept in data/sharedTask2nd/st_ihm_all/.backup

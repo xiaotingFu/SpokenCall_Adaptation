@@ -49,7 +49,7 @@ def prepareKaldiTestData(prefix, dest):
             readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
                 if row_number!=0:
-                    utt_id = prefix + '-' + str(row[0])
+                    utt_id = prefix + '_' + str(row[0])
                     wave_file = str(row[2])
                     # File: wav.scp
                     # file_id    path/file
@@ -73,7 +73,7 @@ def prepareKaldiTestData(prefix, dest):
             readCSV = csv.reader(csvfile, delimiter='\t')
             for row in readCSV:
                 if row_number!=0:
-                    utt_id = prefix + '-' + str(row[0])
+                    utt_id = prefix + '_' + str(row[0])
                     utterance = str(row[3])
                     # Prepare text alignment file
                     # File: text
@@ -133,12 +133,11 @@ def prepareKaldiData(prefix, csvPath,audioPath, dest):
 
 
 def main():
-    # prepareKaldiData('sc1',train_label_1st, audio_1st, destination_train)
-    # prepareKaldiData('sc1',test_label_1st, audio_1st, destination_train)
-    # prepareKaldiData('sc2',train_label_A_2nd, train_audio_2nd,destination_train)
-    # prepareKaldiData('sc2',train_label_B_2nd, train_audio_2nd,destination_train)
-    # prepareKaldiData('sc2',train_label_C_2nd, train_audio_2nd,destination_train)
+    prepareKaldiData('sc1',train_label_1st, audio_1st, destination_train)
+    prepareKaldiData('sc1',test_label_1st, audio_1st, destination_train)
+    prepareKaldiData('sc2',train_label_A_2nd, train_audio_2nd,destination_train)
+    prepareKaldiData('sc2',train_label_B_2nd, train_audio_2nd,destination_train)
+    prepareKaldiData('sc2',train_label_C_2nd, train_audio_2nd,destination_train)
     prepareKaldiTestData('sc2', destination_test)
     # prepareKaldiData('sc2',test_label_2nd, test_audio_2nd,destination_test)
-
 main()
