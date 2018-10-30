@@ -1,7 +1,7 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
-step=2
+step=3
 
 . ./cmd.sh
 . ./path.sh
@@ -187,6 +187,7 @@ cp ${data_dir}/text ${train_fmllr}/
 
 # split the data : 90% train 10% cross-validation (held-out)
 utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
+
 fi
 
 if [ $step == 8 ]; then
@@ -236,6 +237,3 @@ if [ $step == 10 ]; then
     ( steps/nnet/decode.sh --nj $nj_decode  --use-gpu "yes" --cmd "$cuda_cmd" --config conf/decode_dnn.conf \
     --acwt $acwt $graph_dir $test_fmllr ${dir_re}/decode_st.test_${LM}_acwt$acwt )&
 fi
-
-
-
