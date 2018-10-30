@@ -1,14 +1,14 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
-step=1
+step=3
 
 . ./cmd.sh
 . ./path.sh
 
 ### parameters (part 1)
-nj=10
-nj_decode=10
+nj=15
+nj_decode=15
 set=10
 
 numLeavesTri1=5000
@@ -44,7 +44,7 @@ if [ $step -le 0 ]; then
     utils/format_lm.sh data/lang_v1 data/local/lm_st${set}.o3g/$LM.gz data/local/dict_v1/lexicon.txt data/lang_$LM
 fi
 
-if [ $step == 1 ]; then
+if [ $step -le 1 ]; then
     ####################################################################################################
     echo '''                        Step 1 : prepare data and extract features                       '''
     ####################################################################################################
@@ -57,7 +57,7 @@ if [ $step == 1 ]; then
     steps/compute_cmvn_stats.sh $test $test/log $test/data
 fi
 
-if [ $step == 2 ]; then
+if [ $step -le 2 ]; then
     ####################################################################################################
     echo '''                        Step 2 : train monophone model                                   '''
     ####################################################################################################
@@ -76,7 +76,7 @@ if [ $step == 2 ]; then
         $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step == 3 ]; then
+if [ $step -le 3 ]; then
     ####################################################################################################
     echo '''                        Step 3 : tri1                                                    '''
     ####################################################################################################
@@ -85,15 +85,15 @@ if [ $step == 3 ]; then
     steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/tri1 ${exp_dir}/tri1_ali
 
     # decode, we can skip decoding
-    graph_dir=${exp_dir}/tri1/graph_${LM}
-    $highmem_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri1 $graph_dir
-    acwt=0.06
-    (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-        $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
-fi
+#     graph_dir=${exp_dir}/tri1/graph_${LM}
+#     $highmem_cmd $graph_dir/mkgraph.log \
+#         utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri1 $graph_dir
+#     acwt=0.06
+#     (steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+#         $graph_dir $test ${exp_dir}/tri1/decode_st.test_${LM}_acwt$acwt )&
+# fi
 
-if [ $step == 4 ]; then
+if [ $step -le 4 ]; then
     ####################################################################################################
     echo '''                        Step 4 : tri2                                                    '''
     ####################################################################################################
@@ -102,15 +102,15 @@ if [ $step == 4 ]; then
     steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/tri2a ${exp_dir}/tri2a_ali
 
     # decode, we can skip this
-    graph_dir=${exp_dir}/tri2a/graph_${LM}
-    $highmem_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri2a $graph_dir
-    acwt=0.06
-    ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-        $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
+    # graph_dir=${exp_dir}/tri2a/graph_${LM}
+    # $highmem_cmd $graph_dir/mkgraph.log \
+    #     utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri2a $graph_dir
+    # acwt=0.06
+    # ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+    #     $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step == 5 ]; then
+if [ $step -le 5 ]; then
     ####################################################################################################
     echo '''                        Step 5 : tri3, MLLT+LDA                                          '''
     ####################################################################################################
@@ -122,15 +122,15 @@ if [ $step == 5 ]; then
         $data_dir $lang ${exp_dir}/tri3a ${exp_dir}/tri3a_ali
 
     # decode, we can skip this
-    graph_dir=${exp_dir}/tri3a/graph_${LM}
-    $highmem_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri3a $graph_dir
-    acwt=0.06
-    ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-        $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
+    # graph_dir=${exp_dir}/tri3a/graph_${LM}
+    # $highmem_cmd $graph_dir/mkgraph.log \
+    #     utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri3a $graph_dir
+    # acwt=0.06
+    # ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+    #     $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
-if [ $step == 6 ]; then
+if [ $step -le 6 ]; then
     ####################################################################################################
     echo '''                        Step 6 : tri4, MLLT+LDA+SAT                                      '''
     ####################################################################################################
