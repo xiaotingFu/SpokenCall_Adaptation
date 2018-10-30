@@ -7,8 +7,8 @@ step=1
 . ./path.sh
 
 ### parameters (part 1)
-nj=1
-nj_decode=1
+nj=10
+nj_decode=10
 set=10
 
 numLeavesTri1=5000
