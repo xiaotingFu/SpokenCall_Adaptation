@@ -1,0 +1,398 @@
+step: 2
+                        Step 2 : train monophone model                                   
+utils/subset_data_dir.sh: reducing #utt from 121135 to 15000
+steps/train_mono.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train_15k data/lang_v1 exp2/mono
+steps/train_mono.sh: Initializing monophone system.
+steps/train_mono.sh: Compiling training graphs
+steps/train_mono.sh: Aligning data equally (pass 0)
+steps/train_mono.sh: Pass 1
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 2
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 3
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 4
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 5
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 6
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 7
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 8
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 9
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 10
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 11
+steps/train_mono.sh: Pass 12
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 13
+steps/train_mono.sh: Pass 14
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 15
+steps/train_mono.sh: Pass 16
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 17
+steps/train_mono.sh: Pass 18
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 19
+steps/train_mono.sh: Pass 20
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 21
+steps/train_mono.sh: Pass 22
+steps/train_mono.sh: Pass 23
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 24
+steps/train_mono.sh: Pass 25
+steps/train_mono.sh: Pass 26
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 27
+steps/train_mono.sh: Pass 28
+steps/train_mono.sh: Pass 29
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 30
+steps/train_mono.sh: Pass 31
+steps/train_mono.sh: Pass 32
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 33
+steps/train_mono.sh: Pass 34
+steps/train_mono.sh: Pass 35
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 36
+steps/train_mono.sh: Pass 37
+steps/train_mono.sh: Pass 38
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 39
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/mono
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 14.3162393162% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 60.4767628205% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/mono/log/analyze_alignments.log
+400 warnings in exp2/mono/log/update.*.log
+16783 warnings in exp2/mono/log/align.*.*.log
+2 warnings in exp2/mono/log/analyze_alignments.log
+1081 warnings in exp2/mono/log/acc.*.*.log
+exp2/mono: nj=30 align prob=-99.13 over 10.91h [retry=2.5%, fail=0.2%] states=137 gauss=983
+steps/train_mono.sh: Done training monophone system in exp2/mono
+steps/align_si.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/mono exp2/mono_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train using model from exp2/mono, putting alignments in exp2/mono_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/mono_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 14.4191472111% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 60.558101825% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/mono_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+                        Step 3 : tri1                                                    
+steps/train_deltas.sh --cmd run.pl --mem 28G 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/mono_ali exp2/tri1
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+** The warnings above about 'no stats' generally mean you have phones **
+** (or groups of phones) in your phone set that had no corresponding data. **
+** You should probably figure out whether something went wrong, **
+** or whether your data just doesn't happen to have examples of those **
+** phones. **
+steps/train_deltas.sh: converting alignments from exp2/mono_ali to use current tree
+steps/train_deltas.sh: compiling graphs of transcripts
+steps/train_deltas.sh: training pass 1
+steps/train_deltas.sh: training pass 2
+steps/train_deltas.sh: training pass 3
+steps/train_deltas.sh: training pass 4
+steps/train_deltas.sh: training pass 5
+steps/train_deltas.sh: training pass 6
+steps/train_deltas.sh: training pass 7
+steps/train_deltas.sh: training pass 8
+steps/train_deltas.sh: training pass 9
+steps/train_deltas.sh: training pass 10
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 11
+steps/train_deltas.sh: training pass 12
+steps/train_deltas.sh: training pass 13
+steps/train_deltas.sh: training pass 14
+steps/train_deltas.sh: training pass 15
+steps/train_deltas.sh: training pass 16
+steps/train_deltas.sh: training pass 17
+steps/train_deltas.sh: training pass 18
+steps/train_deltas.sh: training pass 19
+steps/train_deltas.sh: training pass 20
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 21
+steps/train_deltas.sh: training pass 22
+steps/train_deltas.sh: training pass 23
+steps/train_deltas.sh: training pass 24
+steps/train_deltas.sh: training pass 25
+steps/train_deltas.sh: training pass 26
+steps/train_deltas.sh: training pass 27
+steps/train_deltas.sh: training pass 28
+steps/train_deltas.sh: training pass 29
+steps/train_deltas.sh: training pass 30
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 31
+steps/train_deltas.sh: training pass 32
+steps/train_deltas.sh: training pass 33
+steps/train_deltas.sh: training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri1
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 11.8892346398% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 54.8397775424% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri1/log/analyze_alignments.log
+2 warnings in exp2/tri1/log/questions.log
+9874 warnings in exp2/tri1/log/acc.*.*.log
+9401 warnings in exp2/tri1/log/align.*.*.log
+2 warnings in exp2/tri1/log/analyze_alignments.log
+71 warnings in exp2/tri1/log/update.*.log
+4 warnings in exp2/tri1/log/init_model.log
+1 warnings in exp2/tri1/log/build_tree.log
+exp2/tri1: nj=30 align prob=-96.21 over 88.70h [retry=2.1%, fail=0.3%] states=3832 gauss=80216 tree-impr=3.32
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp2/tri1
+steps/align_si.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri1 exp2/tri1_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train using model from exp2/tri1, putting alignments in exp2/tri1_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri1_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 11.7402674788% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 54.345703125% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri1_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+                        Step 4 : tri2                                                    
+steps/train_deltas.sh --cmd run.pl --mem 28G 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri1_ali exp2/tri2a
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+** The warnings above about 'no stats' generally mean you have phones **
+** (or groups of phones) in your phone set that had no corresponding data. **
+** You should probably figure out whether something went wrong, **
+** or whether your data just doesn't happen to have examples of those **
+** phones. **
+steps/train_deltas.sh: converting alignments from exp2/tri1_ali to use current tree
+steps/train_deltas.sh: compiling graphs of transcripts
+steps/train_deltas.sh: training pass 1
+steps/train_deltas.sh: training pass 2
+steps/train_deltas.sh: training pass 3
+steps/train_deltas.sh: training pass 4
+steps/train_deltas.sh: training pass 5
+steps/train_deltas.sh: training pass 6
+steps/train_deltas.sh: training pass 7
+steps/train_deltas.sh: training pass 8
+steps/train_deltas.sh: training pass 9
+steps/train_deltas.sh: training pass 10
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 11
+steps/train_deltas.sh: training pass 12
+steps/train_deltas.sh: training pass 13
+steps/train_deltas.sh: training pass 14
+steps/train_deltas.sh: training pass 15
+steps/train_deltas.sh: training pass 16
+steps/train_deltas.sh: training pass 17
+steps/train_deltas.sh: training pass 18
+steps/train_deltas.sh: training pass 19
+steps/train_deltas.sh: training pass 20
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 21
+steps/train_deltas.sh: training pass 22
+steps/train_deltas.sh: training pass 23
+steps/train_deltas.sh: training pass 24
+steps/train_deltas.sh: training pass 25
+steps/train_deltas.sh: training pass 26
+steps/train_deltas.sh: training pass 27
+steps/train_deltas.sh: training pass 28
+steps/train_deltas.sh: training pass 29
+steps/train_deltas.sh: training pass 30
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 31
+steps/train_deltas.sh: training pass 32
+steps/train_deltas.sh: training pass 33
+steps/train_deltas.sh: training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri2a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 11.9000521424% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 53.6172748566% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri2a/log/analyze_alignments.log
+68 warnings in exp2/tri2a/log/update.*.log
+3 warnings in exp2/tri2a/log/init_model.log
+1 warnings in exp2/tri2a/log/build_tree.log
+2 warnings in exp2/tri2a/log/questions.log
+10077 warnings in exp2/tri2a/log/align.*.*.log
+10717 warnings in exp2/tri2a/log/acc.*.*.log
+2 warnings in exp2/tri2a/log/analyze_alignments.log
+exp2/tri2a: nj=30 align prob=-96.15 over 88.69h [retry=2.2%, fail=0.3%] states=3880 gauss=80128 tree-impr=3.71
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp2/tri2a
+steps/align_si.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri2a exp2/tri2a_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train using model from exp2/tri2a, putting alignments in exp2/tri2a_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri2a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 11.863635235% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 53.3871862145% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri2a_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+                        Step 5 : tri3, MLLT+LDA                                          
+steps/train_lda_mllt.sh --cmd run.pl --mem 28G --splice-opts --left-context=3 --right-context=3 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri2a_ali exp2/tri3a
+steps/train_lda_mllt.sh: Accumulating LDA statistics.
+steps/train_lda_mllt.sh: Accumulating tree stats
+steps/train_lda_mllt.sh: Getting questions for tree clustering.
+steps/train_lda_mllt.sh: Building the tree
+steps/train_lda_mllt.sh: Initializing the model
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+This is a bad warning.
+steps/train_lda_mllt.sh: Converting alignments from exp2/tri2a_ali to use current tree
+steps/train_lda_mllt.sh: Compiling graphs of transcripts
+Training pass 1
+Training pass 2
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 3
+Training pass 4
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 5
+Training pass 6
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 7
+Training pass 8
+Training pass 9
+Training pass 10
+Aligning data
+Training pass 11
+Training pass 12
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 13
+Training pass 14
+Training pass 15
+Training pass 16
+Training pass 17
+Training pass 18
+Training pass 19
+Training pass 20
+Aligning data
+Training pass 21
+Training pass 22
+Training pass 23
+Training pass 24
+Training pass 25
+Training pass 26
+Training pass 27
+Training pass 28
+Training pass 29
+Training pass 30
+Aligning data
+Training pass 31
+Training pass 32
+Training pass 33
+Training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri3a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 10.448749793% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 50.0198708395% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri3a/log/analyze_alignments.log
+312 warnings in exp2/tri3a/log/lda_acc.*.log
+2 warnings in exp2/tri3a/log/questions.log
+68 warnings in exp2/tri3a/log/update.*.log
+1 warnings in exp2/tri3a/log/build_tree.log
+12233 warnings in exp2/tri3a/log/acc.*.*.log
+2 warnings in exp2/tri3a/log/analyze_alignments.log
+10451 warnings in exp2/tri3a/log/align.*.*.log
+4 warnings in exp2/tri3a/log/init_model.log
+exp2/tri3a: nj=30 align prob=-50.87 over 88.66h [retry=2.1%, fail=0.3%] states=4000 gauss=80120 tree-impr=3.49 lda-sum=13.75 mllt:impr,logdet=1.18,1.96
+steps/train_lda_mllt.sh: Done training system with LDA+MLLT features in exp2/tri3a
+steps/align_fmllr.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri3a exp2/tri3a_ali
+steps/align_fmllr.sh: feature type is lda
+steps/align_fmllr.sh: compiling training graphs
+steps/align_fmllr.sh: aligning data in data/st_ihm_all/train using exp2/tri3a/final.mdl and speaker-independent features.
+steps/align_fmllr.sh: computing fMLLR transforms
+steps/align_fmllr.sh: doing final alignment.
+steps/align_fmllr.sh: done aligning data.
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri3a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 10.0253302871% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 49.5016721301% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri3a_ali/log/analyze_alignments.log
+13410 warnings in exp2/tri3a_ali/log/fmllr.*.log
+2798 warnings in exp2/tri3a_ali/log/align_pass1.*.log
+2 warnings in exp2/tri3a_ali/log/analyze_alignments.log
+2383 warnings in exp2/tri3a_ali/log/align_pass2.*.log
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/train_sat.sh --cmd run.pl --mem 28G 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri3a_ali exp2/tri4a
+steps/train_sat.sh: feature type is lda
+steps/train_sat.sh: Using transforms from exp2/tri3a_ali
+steps/train_sat.sh: Accumulating tree stats
+steps/train_sat.sh: Getting questions for tree clustering.
+steps/train_sat.sh: Building the tree
+steps/train_sat.sh: Initializing the model
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+This is a bad warning.
+steps/train_sat.sh: Converting alignments from exp2/tri3a_ali to use current tree
+steps/train_sat.sh: Compiling graphs of transcripts
+Pass 1
+Pass 2
+Estimating fMLLR transforms
+Pass 3
+Pass 4
+Estimating fMLLR transforms
+Pass 5
+Pass 6
+Estimating fMLLR transforms
+Pass 7
+Pass 8
+Pass 9
+Pass 10
+Aligning data
+Pass 11
+Pass 12
+Estimating fMLLR transforms
+Pass 13
+Pass 14
+Pass 15
+Pass 16
+Pass 17
+Pass 18
+Pass 19
+Pass 20
+Aligning data
+Pass 21
+Pass 22
+Pass 23
+Pass 24
+Pass 25
+Pass 26
+Pass 27
+Pass 28
+Pass 29
+Pass 30
+Aligning data
+Pass 31
+Pass 32
+Pass 33
+Pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri4a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 9.78371532865% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 47.9054406397% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri4a/log/analyze_alignments.log
+7717 warnings in exp2/tri4a/log/align.*.*.log
+68 warnings in exp2/tri4a/log/update.*.log
+1 warnings in exp2/tri4a/log/build_tree.log
+11299 warnings in exp2/tri4a/log/acc.*.*.log
+53584 warnings in exp2/tri4a/log/fmllr.*.*.log
+2 warnings in exp2/tri4a/log/est_alimdl.log
+2 warnings in exp2/tri4a/log/analyze_alignments.log
+2 warnings in exp2/tri4a/log/init_model.log
+2 warnings in exp2/tri4a/log/questions.log
+steps/train_sat.sh: Likelihood evolution:
+-53.4164 -52.7642 -52.602 -52.4465 -51.8127 -51.0842 -50.619 -50.2893 -50.0274 -49.5781 -49.4098 -49.0231 -48.8794 -48.7816 -48.6961 -48.6197 -48.5496 -48.4837 -48.4223 -48.2943 -48.2187 -48.1712 -48.1285 -48.0879 -48.0489 -48.0115 -47.9753 -47.9406 -47.9075 -47.8389 -47.7916 -47.7682 -47.7527 -47.7415 
+exp2/tri4a: nj=30 align prob=-51.91 over 88.69h [retry=1.5%, fail=0.3%] states=3992 gauss=80077 fmllr-impr=nan over 56.25h tree-impr=5.37
+steps/train_sat.sh: done training SAT system in exp2/tri4a
+steps/align_fmllr.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri4a exp2/tri4a_ali
+steps/align_fmllr.sh: feature type is lda
+steps/align_fmllr.sh: compiling training graphs
+steps/align_fmllr.sh: aligning data in data/st_ihm_all/train using exp2/tri4a/final.alimdl and speaker-independent features.
+steps/align_fmllr.sh: computing fMLLR transforms
+steps/align_fmllr.sh: doing final alignment.
+steps/align_fmllr.sh: done aligning data.
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri4a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 9.51379806976% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 47.5135331998% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri4a_ali/log/analyze_alignments.log
+2608 warnings in exp2/tri4a_ali/log/align_pass1.*.log
+2 warnings in exp2/tri4a_ali/log/analyze_alignments.log
+13376 warnings in exp2/tri4a_ali/log/fmllr.*.log
+2388 warnings in exp2/tri4a_ali/log/align_pass2.*.log
+steps/decode_fmllr.sh --nj 15 --cmd run.pl --mem 28G --config conf/decode.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05

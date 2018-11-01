@@ -1,0 +1,30 @@
+# align-equal-compiled "ark:gunzip -c exp2/mono/fsts.15.gz|" "ark,s,cs:apply-cmvn  --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- | add-deltas  ark:- ark:- |" ark,t:- | gmm-acc-stats-ali --binary=true exp2/mono/0.mdl "ark,s,cs:apply-cmvn  --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- | add-deltas  ark:- ark:- |" ark:- exp2/mono/0.15.acc 
+# Started at Wed Oct 31 21:58:56 EDT 2018
+#
+gmm-acc-stats-ali --binary=true exp2/mono/0.mdl 'ark,s,cs:apply-cmvn  --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- | add-deltas  ark:- ark:- |' ark:- exp2/mono/0.15.acc 
+align-equal-compiled 'ark:gunzip -c exp2/mono/fsts.15.gz|' 'ark,s,cs:apply-cmvn  --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- | add-deltas  ark:- ark:- |' ark,t:- 
+apply-cmvn --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- 
+add-deltas ark:- ark:- 
+apply-cmvn --utt2spk=ark:data/st_ihm_all/train_15k/split30/15/utt2spk scp:data/st_ihm_all/train_15k/split30/15/cmvn.scp scp:data/st_ihm_all/train_15k/split30/15/feats.scp ark:- 
+add-deltas ark:- ark:- 
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 50 utterances; for utterance AMI_ES2014d_H03_MEE056_0174728_0174767 avg. like is -98.891 over 37 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 100 utterances; for utterance AMI_ES2015a_H01_FEE058_0113939_0113981 avg. like is -116.103 over 40 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 150 utterances; for utterance AMI_ES2015b_H01_FEE058_0028443_0028992 avg. like is -107.044 over 547 frames.
+WARNING (align-equal-compiled[5.4.105~1-4fda]:EqualAlign():fstext/fstext-utils-inl.h:876) EqualAlign: the randomly constructed paths lengths: 99,82,90,80,92,96,105,84,77,99
+WARNING (align-equal-compiled[5.4.105~1-4fda]:EqualAlign():fstext/fstext-utils-inl.h:877) EqualAlign: utterance has too few frames 68 to align.
+WARNING (align-equal-compiled[5.4.105~1-4fda]:main():align-equal-compiled.cc:100) AlignEqual: did not align utterence AMI_ES2015b_H03_FEE060_0107057_0107127
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 200 utterances; for utterance AMI_ES2015b_H03_FEE060_0084619_0084769 avg. like is -108.671 over 148 frames.
+LOG (apply-cmvn[5.4.105~1-4fda]:main():apply-cmvn.cc:162) Applied cepstral mean normalization to 499 utterances, errors on 0
+WARNING (align-equal-compiled[5.4.105~1-4fda]:main():align-equal-compiled.cc:109) Computed 498 alignments; 0 lacked features, 1 had other errors.
+WARNING (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:79) No alignment for utterance AMI_ES2015b_H03_FEE060_0107057_0107127
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 250 utterances; for utterance AMI_ES2015c_H00_FEE057_0155727_0155909 avg. like is -104.692 over 180 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 300 utterances; for utterance AMI_ES2015c_H01_FEE058_0205888_0206691 avg. like is -108.721 over 801 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 350 utterances; for utterance AMI_ES2015d_H00_FEE057_0046905_0046992 avg. like is -102.15 over 85 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 400 utterances; for utterance AMI_ES2015d_H01_FEE058_0119491_0119509 avg. like is -107.645 over 16 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:105) Processed 450 utterances; for utterance AMI_ES2015d_H03_FEE060_0073609_0073819 avg. like is -119.947 over 208 frames.
+LOG (apply-cmvn[5.4.105~1-4fda]:main():apply-cmvn.cc:162) Applied cepstral mean normalization to 499 utterances, errors on 0
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:112) Done 498 files, 1 with errors.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:115) Overall avg like per frame (Gaussian only) = -107.312 over 117555 frames.
+LOG (gmm-acc-stats-ali[5.4.105~1-4fda]:main():gmm-acc-stats-ali.cc:123) Written accs.
+# Accounting: time=3 threads=1
+# Ended (code 0) at Wed Oct 31 21:58:59 EDT 2018, elapsed time 3 seconds
