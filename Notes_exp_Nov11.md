@@ -16,11 +16,8 @@ compute-wer --text --mode=present ark:exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7
 Scored 1000 sentences, 0 not present in hyp.
 
 # word error rate for mono
-[xfu7@c74 s1]$ cat exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/wer_20_0.0
-compute-wer --text --mode=present ark:exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/test_filt.txt ark,p:-
-%WER 101.78 [ 5502 / 5406, 96 ins, 1521 del, 3885 sub ]
-%SER 100.00 [ 1000 / 1000 ]
-Scored 1000 sentences, 0 not present in hyp.
+[xfu7@c74 s1]$ cat exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
+%WER 100.70 [ 5444 / 5406, 38 ins, 2011 del, 3395 sub ] exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/wer_20_1.0
 
 # lattice_depth_stats
 cat exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/log/analyze_lattice_depth_stats.log
