@@ -1,0 +1,21 @@
+step: 2
+                        Step 2 : train monophone model                                   
+Decode MonoPhone Model
+utils/mkgraph.sh: exp2/mono/graph_st2.o3g.kn.pr1-7/HCLG.fst is up to date.
+
+real	0m0.026s
+user	0m0.010s
+sys	0m0.013s
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp2/mono/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp2/mono/graph_st2.o3g.kn.pr1-7 exp2/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 66.4% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_lats.sh: see stats in exp2/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(2,7,944) and mean=370.2
+steps/diagnostic/analyze_lats.sh: see stats in exp2/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp2/mono/graph_st2.o3g.kn.pr1-7 exp2/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	24m2.319s
+user	213m28.336s
+sys	2m53.302s

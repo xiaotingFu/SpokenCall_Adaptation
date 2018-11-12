@@ -1,0 +1,132 @@
+step: 1
+                        Step 1 : prepare data and extract features                       
+steps/make_mfcc.sh --nj 15 --cmd run.pl --mem 20G data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+steps/make_mfcc.sh: moving data/sharedTask2nd_test/feats.scp to data/sharedTask2nd_test/.backup
+steps/make_mfcc.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating MFCC features for sharedTask2nd_test
+steps/compute_cmvn_stats.sh data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+Succeeded creating CMVN stats for sharedTask2nd_test
+Finished Feature extraction
+                        Step 2 : train monophone model                                   
+steps/train_mono.sh --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/lang_v1 exp3/mono
+filter_scps.pl: warning: some input lines were output to multiple files [OK if splitting per utt] 
+steps/train_mono.sh: Initializing monophone system.
+steps/train_mono.sh: Compiling training graphs
+steps/train_mono.sh: Aligning data equally (pass 0)
+steps/train_mono.sh: Pass 1
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 2
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 3
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 4
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 5
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 6
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 7
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 8
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 9
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 10
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 11
+steps/train_mono.sh: Pass 12
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 13
+steps/train_mono.sh: Pass 14
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 15
+steps/train_mono.sh: Pass 16
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 17
+steps/train_mono.sh: Pass 18
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 19
+steps/train_mono.sh: Pass 20
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 21
+steps/train_mono.sh: Pass 22
+steps/train_mono.sh: Pass 23
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 24
+steps/train_mono.sh: Pass 25
+steps/train_mono.sh: Pass 26
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 27
+steps/train_mono.sh: Pass 28
+steps/train_mono.sh: Pass 29
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 30
+steps/train_mono.sh: Pass 31
+steps/train_mono.sh: Pass 32
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 33
+steps/train_mono.sh: Pass 34
+steps/train_mono.sh: Pass 35
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 36
+steps/train_mono.sh: Pass 37
+steps/train_mono.sh: Pass 38
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 39
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp3/mono
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 50.16511558090664% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 76.83378364855399% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp3/mono/log/analyze_alignments.log
+2 warnings in exp3/mono/log/analyze_alignments.log
+10928 warnings in exp3/mono/log/align.*.*.log
+400 warnings in exp3/mono/log/update.*.log
+474 warnings in exp3/mono/log/acc.*.*.log
+exp3/mono: nj=30 align prob=-100.94 over 7.99h [retry=1.4%, fail=0.1%] states=137 gauss=979
+steps/train_mono.sh: Done training monophone system in exp3/mono
+
+real	16m1.064s
+user	216m56.115s
+sys	3m4.321s
+steps/align_si.sh --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/lang_v1 exp3/mono exp3/mono_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train_10k using model from exp3/mono, putting alignments in exp3/mono_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp3/mono_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 50.16511558090664% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 76.83378364855399% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp3/mono_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+
+real	0m43.420s
+user	10m6.045s
+sys	0m7.160s
+step: 2
+                        Step 2 : train monophone model                                   
+Decode MonoPhone Model
+tree-info exp3/mono/tree 
+tree-info exp3/mono/tree 
+make-h-transducer --disambig-syms-out=exp3/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_1_0 exp3/mono/tree exp3/mono/final.mdl 
+fstminimizeencoded 
+fstrmsymbols exp3/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int 
+fstrmepslocal 
+fsttablecompose exp3/mono/graph_st2.o3g.kn.pr1-7/Ha.fst data/lang_st2.o3g.kn.pr1-7/tmp/CLG_1_0.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp3/mono/graph_st2.o3g.kn.pr1-7/HCLGa.fst 
+0.297288 -0.0004214
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp3/mono/final.mdl 
+
+real	0m12.068s
+user	0m11.874s
+sys	0m0.712s
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp3/mono/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp3/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp3/mono/graph_st2.o3g.kn.pr1-7 exp3/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp3/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(2,137,1440) and mean=518.8
+steps/diagnostic/analyze_lats.sh: see stats in exp3/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp3/mono/graph_st2.o3g.kn.pr1-7 exp3/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	31m0.129s
+user	288m4.462s
+sys	3m46.975s

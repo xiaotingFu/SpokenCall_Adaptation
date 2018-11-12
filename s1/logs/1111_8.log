@@ -1,0 +1,26 @@
+step: 1
+                        Step 1 : prepare data and extract features                       
+Extract feature for training data
+steps/make_mfcc.sh --nj 15 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/st_ihm_all/train_10k/log data/st_ihm_all/train_10k/data
+steps/make_mfcc.sh: moving data/st_ihm_all/train_10k/feats.scp to data/st_ihm_all/train_10k/.backup
+steps/make_mfcc.sh [info]: segments file exists: using that.
+Succeeded creating MFCC features for train_10k
+steps/compute_cmvn_stats.sh data/st_ihm_all/train_10k data/st_ihm_all/train_10k/log data/st_ihm_all/train_10k/data
+Succeeded creating CMVN stats for train_10k
+Extract feature for testing data
+steps/make_mfcc.sh --nj 15 --cmd run.pl --mem 20G data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+steps/make_mfcc.sh: moving data/sharedTask2nd_test/feats.scp to data/sharedTask2nd_test/.backup
+steps/make_mfcc.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+run.pl: 15 / 15 failed, log is in data/sharedTask2nd_test/log/make_mfcc_sharedTask2nd_test.*.log
+steps/compute_cmvn_stats.sh data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+make_cmvn.sh: no such file data/sharedTask2nd_test/feats.scp
+Finished Feature extraction
+step: 1
+                        Step 1 : prepare data and extract features                       
+Extract feature for testing data
+steps/make_mfcc.sh --nj 15 --cmd run.pl --mem 20G data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+steps/make_mfcc.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating MFCC features for sharedTask2nd_test
+steps/compute_cmvn_stats.sh data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+Succeeded creating CMVN stats for sharedTask2nd_test
+Finished Feature extraction

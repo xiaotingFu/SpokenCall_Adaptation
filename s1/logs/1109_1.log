@@ -1,0 +1,29 @@
+step: 6
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/align_fmllr.sh --nj 30 --cmd run.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri4a exp2/tri4a_ali
+steps/align_fmllr.sh: feature type is lda
+steps/align_fmllr.sh: compiling training graphs
+steps/align_fmllr.sh: aligning data in data/st_ihm_all/train using exp2/tri4a/final.alimdl and speaker-independent features.
+steps/align_fmllr.sh: computing fMLLR transforms
+steps/align_fmllr.sh: doing final alignment.
+steps/align_fmllr.sh: done aligning data.
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 28G data/lang_v1 exp2/tri4a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 9.51379806976% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 47.5135331998% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri4a_ali/log/analyze_alignments.log
+2608 warnings in exp2/tri4a_ali/log/align_pass1.*.log
+2 warnings in exp2/tri4a_ali/log/analyze_alignments.log
+13376 warnings in exp2/tri4a_ali/log/fmllr.*.log
+2388 warnings in exp2/tri4a_ali/log/align_pass2.*.log
+./run.sh: line 149: exp2/tri4a/graph_st2.o3g.kn.pr1-7/mkgraph.log: No such file or directory
+steps/decode_fmllr.sh --nj 15 --cmd run.pl --mem 28G --config conf/decode.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+cat: exp2/tri4a/graph_st2.o3g.kn.pr1-7/phones/silence.csl: No such file or directory
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 15 --cmd run.pl --mem 28G --transform-dir exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05 exp2/data-fmllr-tri4/sharedTask_Test data/sharedTask2nd_test exp2/tri4a exp2/data-fmllr-tri4/sharedTask_Test/log exp2/data-fmllr-tri4/sharedTask_Test/data
+steps/nnet/make_fmllr_feats.sh: Missing exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/trans.1
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 28G --transform-dir exp2/tri4a_ali exp2/data-fmllr-tri4/train2 data/st_ihm_all/train exp2/tri4a exp2/data-fmllr-tri4/train2/log exp2/data-fmllr-tri4/train2/data
+steps/nnet/make_fmllr_feats.sh: feature type is lda_fmllr
+apply_map.pl: undefined key AMI_EN2001a_H00_MEE068_0218806_0218816 in exp2/data-fmllr-tri4/train2/utt_map
+Speakers, src=23406, trn=21066, cv=2340 /tmp/xfu7_QFPjZ/speakers_cv
+utils/data/subset_data_dir.sh: reducing #utt from 121135 to 109150
+utils/data/subset_data_dir.sh: reducing #utt from 121135 to 11985

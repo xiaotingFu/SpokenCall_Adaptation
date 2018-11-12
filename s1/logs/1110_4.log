@@ -1,0 +1,25 @@
+step: 7
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 15 --cmd run.pl --mem 20G --transform-dir exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05 exp2/data-fmllr-tri4/sharedTask2nd_Test data/sharedTask2nd_test exp2/tri4a exp2/data-fmllr-tri4/sharedTask2nd_Test/log exp2/data-fmllr-tri4/sharedTask2nd_Test/data
+steps/nnet/make_fmllr_feats.sh: feature type is lda_fmllr
+utils/copy_data_dir.sh: copied data from data/sharedTask2nd_test to exp2/data-fmllr-tri4/sharedTask2nd_Test
+utils/validate_data_dir.sh: Successfully validated data-directory exp2/data-fmllr-tri4/sharedTask2nd_Test
+steps/nnet/make_fmllr_feats.sh: Done!, type lda_fmllr, data/sharedTask2nd_test --> exp2/data-fmllr-tri4/sharedTask2nd_Test, using : raw-trans None, gmm exp2/tri4a, trans exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp2/tri4a_ali exp2/data-fmllr-tri4/train2 data/st_ihm_all/train exp2/tri4a exp2/data-fmllr-tri4/train2/log exp2/data-fmllr-tri4/train2/data
+steps/nnet/make_fmllr_feats.sh: feature type is lda_fmllr
+apply_map.pl: undefined key AMI_EN2001a_H00_MEE068_0218806_0218816 in exp2/data-fmllr-tri4/train2/utt_map
+Speakers, src=23406, trn=21066, cv=2340 /tmp/xfu7_4VkCD/speakers_cv
+utils/data/subset_data_dir.sh: reducing #utt from 121135 to 109150
+utils/data/subset_data_dir.sh: reducing #utt from 121135 to 11985
+                        Step 8 : train dnn model with tri4a gmm model                    
+                        Step 9 : align dnn model and prepare for retraining model        
+steps/nnet/align.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G exp2/data-fmllr-tri4/train2_tr90 data/lang_v1 exp2/dnn4_pretrain-dbn_dnn_6_1024 exp2/dnn4_pretrain-dbn_dnn_6_1024_ali
+steps/nnet/decode.sh --nj 15 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 exp2/data-fmllr-tri4/sharedTask2nd_Test exp2/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+steps/nnet/align.sh: aligning data 'exp2/data-fmllr-tri4/train2_tr90' using nnet/model 'exp2/dnn4_pretrain-dbn_dnn_6_1024', putting alignments in 'exp2/dnn4_pretrain-dbn_dnn_6_1024_ali'
+run.pl: 15 / 15 failed, log is in exp2/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/log/decode.*.log
+steps/nnet/align.sh: done aligning data.
+nnet-copy --binary=false exp2/dnn4_pretrain-dbn_dnn_6_1024/final.nnet exp2/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet 
+LOG (nnet-copy[5.4.105~1-4fda]:main():nnet-copy.cc:145) Written 'nnet1' to exp2/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet
+nnet-copy exp2/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn exp2/dnn4_pretrain-dbn_dnn_6_1024/final.dbn 
+LOG (nnet-copy[5.4.105~1-4fda]:main():nnet-copy.cc:145) Written 'nnet1' to exp2/dnn4_pretrain-dbn_dnn_6_1024/final.dbn
+utils/subset_data_dir.sh: reducing #utt from 121135 to 0

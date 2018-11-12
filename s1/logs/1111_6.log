@@ -1,0 +1,20 @@
+step: 2
+                        Step 2 : train monophone model                                   
+Decode MonoPhone Model
+utils/mkgraph.sh: exp4/mono/graph_st2.o3g.kn.pr1-7/HCLG.fst is up to date.
+
+real	0m0.034s
+user	0m0.010s
+sys	0m0.018s
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --skip-scoring false --config conf/decode.conf --acwt 0.06 exp4/mono/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp4/mono/graph_st2.o3g.kn.pr1-7 exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,2,3) and mean=2.2
+steps/diagnostic/analyze_lats.sh: see stats in exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp4/mono/graph_st2.o3g.kn.pr1-7 exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	4m14.364s
+user	44m4.554s
+sys	0m12.077s

@@ -9,7 +9,8 @@ step=2
 ### parameters (part 1)
 nj=30
 nj_decode=15
-set=2
+set=5
+boost_sil=1.25
 
 numLeavesTri1=5000
 numGaussTri1=80000
@@ -19,13 +20,13 @@ numLeavesTri4=5000
 numGaussTri4=80000
 exp_dir=exp${set}                        # directory for saving models and results
 # data_dir=data/sharedTask2nd/st_ihm_all/train${set}
-data_dir=data/st_ihm_all/train
+data_dir=data/st_ihm_all/train_10k
 # data_dir_sub=data/sharedTask2nd/all
 
-data_sub_dir=data/sharedTask2nd/all
+data_dir_sub=data/sharedTask2nd/all
 test=data/sharedTask2nd_test
 lang=data/lang_v1
-LM=st${set}.o3g.kn.pr1-7
+LM=st2.o3g.kn.pr1-7
 
 # you might not want to do this for interactive shells.
 
@@ -42,6 +43,7 @@ if [ $step -le 0 ]; then
     prune-lm --threshold=1e-7 data/local/lm_st${set}.o3g/st${set}.o3g.kn.gz /dev/stdout | gzip -c \
         > data/local/lm_st${set}.o3g/$LM.gz
     utils/format_lm.sh data/lang_v1 data/local/lm_st${set}.o3g/$LM.gz data/local/dict_v1/lexicon.txt data/lang_$LM
+exit 0
 fi
 
 if [ $step -le 1 ]; then
@@ -50,35 +52,42 @@ if [ $step -le 1 ]; then
     ####################################################################################################
     ## Note: you can skip this if you use our provided features.
     # extract features for training data
-    echo "Extract feature for training data"
-    steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $data_dir $data_dir/log $data_dir/data
-    steps/compute_cmvn_stats.sh $data_dir $data_dir/log $data_dir/data
+    #echo "Extract feature for training data"
+    #steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $data_dir $data_dir/log $data_dir/data
+    #steps/compute_cmvn_stats.sh $data_dir $data_dir/log $data_dir/data
     echo "Extract feature for testing data"
     # extract features for test data
     steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $test $test/log $test/data
     steps/compute_cmvn_stats.sh $test $test/log $test/data
     echo "Finished Feature extraction"
-    #exit 0
+    exit 0
 fi
 
 if [ $step -le 2 ]; then
     ####################################################################################################
     echo '''                        Step 2 : train monophone model                                   '''
     ####################################################################################################
-    utils/subset_data_dir.sh data/st_ihm_all/train 15000 data/st_ihm_all/train_15k
-     # train
-    time steps/train_mono.sh --nj $nj --cmd "$train_cmd" data/st_ihm_all/train_15k $lang ${exp_dir}/mono
+
+    #utils/subset_data_dir.sh data/ihm_8kHz/train 5000 data/ihm_8kHz/train_5k
+    #utils/subset_data_dir.sh data/sharedTask2nd/all 5000 data/sharedTask2nd/train_5k
+    # train
+    #train5k_dir=data/sharedTask2nd/train_5k
+    time steps/train_mono.sh \
+       --boost-silence $boost_sil --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/mono
 
     # alignment
-    time steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/mono ${exp_dir}/mono_ali
+    time steps/align_si.sh \
+      --boost-silence $boost_sil --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/mono ${exp_dir}/mono_ali
 
     # decode, we can skip this if we do not want the decoding result for monophone model
-    # graph_dir=${exp_dir}/mono/graph_${LM}
-    #utils/mkgraph.sh data/lang_${LM} ${exp_dir}/mono $graph_dir
-    #acwt=0.06
-    #(steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-    #     $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt )&
-    #exit 0
+    echo "Decode MonoPhone Model"
+    ( graph_dir=${exp_dir}/mono/graph_${LM}
+    time utils/mkgraph.sh data/lang_${LM} ${exp_dir}/mono $graph_dir
+    acwt=0.06
+    time steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --skip-scoring false --config conf/decode.conf --acwt $acwt\
+         $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt
+    )&
+    exit 0
 fi
 
 if [ $step -le 3 ]; then
@@ -107,12 +116,11 @@ if [ $step -le 4 ]; then
     steps/align_si.sh --nj $nj --cmd "$train_cmd" $data_dir $lang ${exp_dir}/tri2a ${exp_dir}/tri2a_ali
 
     # decode, we can skip this
-    # graph_dir=${exp_dir}/tri2a/graph_${LM}
-    # $highmem_cmd $graph_dir/mkgraph.log \
-    #     utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri2a $graph_dir
-    # acwt=0.06
-    # ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
-    #     $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
+    graph_dir=${exp_dir}/tri2a/graph_${LM}
+    utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri2a $graph_dir
+     acwt=0.06
+     ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+       $graph_dir $test ${exp_dir}/tri2a/decode_st.test_${LM}_acwt$acwt )&
 fi
 
 if [ $step -le 5 ]; then
@@ -139,21 +147,20 @@ if [ $step -le 6 ]; then
     ####################################################################################################
     echo '''                        Step 6 : tri4, MLLT+LDA+SAT                                      '''
     ####################################################################################################
-    steps/train_sat.sh  --cmd "$train_cmd" \
-        $numLeavesTri4 $numGaussTri4 $data_dir $lang ${exp_dir}/tri3a_ali ${exp_dir}/tri4a
-    steps/align_fmllr.sh --nj $nj --cmd "$train_cmd" \
-        $data_dir $lang ${exp_dir}/tri4a ${exp_dir}/tri4a_ali
+    #time steps/train_sat.sh  --cmd "$train_cmd" \
+    #    $numLeavesTri4 $numGaussTri4 $data_dir $lang ${exp_dir}/tri3a_ali ${exp_dir}/tri4a
+    #time steps/align_fmllr.sh --nj $nj --cmd "$train_cmd" \
+    #    $data_dir $lang ${exp_dir}/tri4a ${exp_dir}/tri4a_ali
 
     # decode, do not skip making graph  
     graph_dir=${exp_dir}/tri4a/graph_${LM}
-    $highmem_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri4a $graph_dir
+    # time $train_cmd $graph_dir/mkgraph.log \
+    time utils/mkgraph.sh data/lang_${LM} ${exp_dir}/tri4a $graph_dir
     acwt=0.05
-    steps/decode_fmllr.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
+    time steps/decode_fmllr.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
         $graph_dir $test ${exp_dir}/tri4a/decode_st.test_${LM}_acwt$acwt
 fi
 
-if [ $step == 7 ]; then
     ## parameters (part 2)
     # parameter for extract fmllr features
     gmmdir=${exp_dir}/tri4a
@@ -163,9 +170,9 @@ if [ $step == 7 ]; then
     nn_depth=6
     hid_dim=1024
     train_fmllr=${data_fmllr}/train${set}
-    train_fmllr_sub=${data_fmllr}/sharedTask/train${set}
+    train_fmllr_sub=${data_fmllr}/sharedTask2nd/train${set}
     #test_fmllr=${data_fmllr}/sharedTask/test${set}
-    test_fmllr=${data_fmllr}/sharedTask_Test
+    test_fmllr=${data_fmllr}/sharedTask2nd_Test
     dbn_dir=${exp_dir}/dnn4_pretrain-dbn_${nn_depth}_${hid_dim}
     # parameter for finetuning
     dir=${exp_dir}/dnn4_pretrain-dbn_dnn_${nn_depth}_${hid_dim}
@@ -176,7 +183,8 @@ if [ $step == 7 ]; then
     dbn_re=$dir/final.dbn
     dir_re=${dir}_reST
     ali_re=${dir}_ali
-    ####################################################################################################
+if [ $step -le 7 ]; then    
+####################################################################################################
     echo '''                        Step 7 : extract fmllr features                                  '''
     ####################################################################################################
     # test set
@@ -192,7 +200,7 @@ if [ $step == 7 ]; then
     utils/subset_data_dir_tr_cv.sh $train_fmllr ${train_fmllr}_tr90 ${train_fmllr}_cv10
 fi
 
-if [ $step == 8 ]; then
+if [ $step -le 8 ]; then
     ####################################################################################################
     echo '''                        Step 8 : train dnn model with tri4a gmm model                    '''
     ####################################################################################################
@@ -210,7 +218,7 @@ if [ $step == 8 ]; then
 fi
 
 
-if [ $step == 9 ]; then
+if [ $step -le 9 ]; then
     ####################################################################################################
     echo '''                        Step 9 : align dnn model and prepare for retraining model        '''
     ####################################################################################################
@@ -227,15 +235,15 @@ if [ $step == 9 ]; then
     utils/subset_data_dir.sh --utt-list data/sharedTask/utt_ids/utt${set}_train $train_fmllr $train_fmllr_sub
 fi
 
-if [ $step == 10 ]; then
+if [ $step -le 10 ]; then
     ####################################################################################################
     echo '''                        Step 10 : finetune dnn4 with only st data                        '''
     ####################################################################################################
-    $cuda_cmd ${dir_re}/log/train_nnet.log \
+    time $cuda_cmd ${dir_re}/log/train_nnet.log \
         steps/nnet/train.sh --feature-transform $feature_transform --dbn $dbn_re --hid-layers 0 \
         --hid-dim ${hid_dim} --learn-rate 0.008 $train_fmllr_sub $train_fmllr_sub $lang $ali_re $ali_re $dir_re
     # decode
     acwt=0.05
-    ( steps/nnet/decode.sh --nj $nj_decode  --use-gpu "yes" --cmd "$cuda_cmd" --config conf/decode_dnn.conf \
-    --acwt $acwt $graph_dir $test_fmllr ${dir_re}/decode_st.test_${LM}_acwt$acwt )&
+    time steps/nnet/decode.sh --nj $nj_decode  --use-gpu "yes" --cmd "$cuda_cmd" --config conf/decode_dnn.conf \
+    --acwt $acwt $graph_dir $test_fmllr ${dir_re}/decode_st.test_${LM}_acwt$acwt
 fi

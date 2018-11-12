@@ -1,0 +1,54 @@
+step: 5
+                        Step 5 : tri3, MLLT+LDA                                          
+steps/train_lda_mllt.sh --cmd slurm.pl --mem 28G --splice-opts --left-context=3 --right-context=3 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri2a_ali exp2/tri3a
+steps/train_lda_mllt.sh: Accumulating LDA statistics.
+sh: -c: line 12: unexpected EOF while looking for matching `''
+sh: -c: line 13: syntax error: unexpected end of file
+/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/utils/slurm.pl: error submitting jobs to queue (return status was 256)
+queue log file is exp2/tri3a/q/lda_acc.log, command was sbatch --export=PATH  --ntasks-per-node=1  -p shared --mem-per-cpu 28G  --open-mode=append -e exp2/tri3a/q/lda_acc.log -o exp2/tri3a/q/lda_acc.log --array 1-30 /home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/exp2/tri3a/q/lda_acc.sh >>exp2/tri3a/q/lda_acc.log 2>&1
+sbatch: error: invalid partition specified: shared
+sbatch: error: Batch job submission failed: Invalid partition name specified
+steps/align_fmllr.sh --nj 30 --cmd slurm.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri3a exp2/tri3a_ali
+steps/align_fmllr.sh: feature type is lda
+steps/align_fmllr.sh: compiling training graphs
+sh: -c: line 12: unexpected EOF while looking for matching `''
+sh: -c: line 13: syntax error: unexpected end of file
+/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/utils/slurm.pl: error submitting jobs to queue (return status was 256)
+queue log file is exp2/tri3a_ali/q/compile_graphs.log, command was sbatch --export=PATH  --ntasks-per-node=1  -p shared --mem-per-cpu 28G  --open-mode=append -e exp2/tri3a_ali/q/compile_graphs.log -o exp2/tri3a_ali/q/compile_graphs.log --array 1-30 /home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/exp2/tri3a_ali/q/compile_graphs.sh >>exp2/tri3a_ali/q/compile_graphs.log 2>&1
+sbatch: error: invalid partition specified: shared
+sbatch: error: Batch job submission failed: Invalid partition name specified
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/train_sat.sh --cmd slurm.pl --mem 28G 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri3a_ali exp2/tri4a
+steps/train_sat.sh: feature type is lda
+steps/train_sat.sh: Using transforms from exp2/tri3a_ali
+steps/train_sat.sh: Accumulating tree stats
+sh: -c: line 12: unexpected EOF while looking for matching `''
+sh: -c: line 13: syntax error: unexpected end of file
+/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/utils/slurm.pl: error submitting jobs to queue (return status was 256)
+queue log file is exp2/tri4a/q/acc_tree.log, command was sbatch --export=PATH  --ntasks-per-node=1  -p shared --mem-per-cpu 28G  --open-mode=append -e exp2/tri4a/q/acc_tree.log -o exp2/tri4a/q/acc_tree.log --array 1-30 /home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/exp2/tri4a/q/acc_tree.sh >>exp2/tri4a/q/acc_tree.log 2>&1
+sbatch: error: invalid partition specified: shared
+sbatch: error: Batch job submission failed: Invalid partition name specified
+
+real	0m0.207s
+user	0m0.096s
+sys	0m0.102s
+steps/align_fmllr.sh --nj 30 --cmd slurm.pl --mem 28G data/st_ihm_all/train data/lang_v1 exp2/tri4a exp2/tri4a_ali
+cp: cannot stat 'exp2/tri4a/tree': No such file or directory
+cp: cannot stat 'exp2/tri4a/final.mdl': No such file or directory
+
+real	0m0.076s
+user	0m0.033s
+sys	0m0.052s
+./run.sh: line 149: exp2/tri4a/graph_st2.o3g.kn.pr1-7/mkgraph.log: No such file or directory
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.001s
+steps/decode_fmllr.sh --nj 15 --cmd slurm.pl --mem 28G --config conf/decode.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+cat: exp2/tri4a/graph_st2.o3g.kn.pr1-7/phones/silence.csl: No such file or directory
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 15 --cmd slurm.pl --mem 28G --transform-dir exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05 exp2/data-fmllr-tri4/sharedTask2nd_Test data/sharedTask2nd_test exp2/tri4a exp2/data-fmllr-tri4/sharedTask2nd_Test/log exp2/data-fmllr-tri4/sharedTask2nd_Test/data
+steps/nnet/make_fmllr_feats.sh: Missing exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/trans.1
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd slurm.pl --mem 28G --transform-dir exp2/tri4a_ali exp2/data-fmllr-tri4/train2 data/st_ihm_all/train exp2/tri4a exp2/data-fmllr-tri4/train2/log exp2/data-fmllr-tri4/train2/data
+steps/nnet/make_fmllr_feats.sh: Missing exp2/tri4a_ali/trans.1
+Missing 'exp2/data-fmllr-tri4/train2/spk2utt'. Error!

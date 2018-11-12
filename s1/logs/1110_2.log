@@ -1,0 +1,102 @@
+step: 6
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/train_sat.sh --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train data/lang_v1 exp2/tri3a_ali exp2/tri4a
+steps/train_sat.sh: feature type is lda
+steps/train_sat.sh: Using transforms from exp2/tri3a_ali
+steps/train_sat.sh: Accumulating tree stats
+steps/train_sat.sh: Getting questions for tree clustering.
+steps/train_sat.sh: Building the tree
+steps/train_sat.sh: Initializing the model
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+This is a bad warning.
+steps/train_sat.sh: Converting alignments from exp2/tri3a_ali to use current tree
+steps/train_sat.sh: Compiling graphs of transcripts
+Pass 1
+Pass 2
+Estimating fMLLR transforms
+Pass 3
+Pass 4
+Estimating fMLLR transforms
+Pass 5
+Pass 6
+Estimating fMLLR transforms
+Pass 7
+Pass 8
+Pass 9
+Pass 10
+Aligning data
+Pass 11
+Pass 12
+Estimating fMLLR transforms
+Pass 13
+Pass 14
+Pass 15
+Pass 16
+Pass 17
+Pass 18
+Pass 19
+Pass 20
+Aligning data
+Pass 21
+Pass 22
+Pass 23
+Pass 24
+Pass 25
+Pass 26
+Pass 27
+Pass 28
+Pass 29
+Pass 30
+Aligning data
+Pass 31
+Pass 32
+Pass 33
+Pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp2/tri4a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 9.78371532865% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 47.9054406397% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri4a/log/analyze_alignments.log
+7717 warnings in exp2/tri4a/log/align.*.*.log
+68 warnings in exp2/tri4a/log/update.*.log
+1 warnings in exp2/tri4a/log/build_tree.log
+11299 warnings in exp2/tri4a/log/acc.*.*.log
+53584 warnings in exp2/tri4a/log/fmllr.*.*.log
+2 warnings in exp2/tri4a/log/est_alimdl.log
+2 warnings in exp2/tri4a/log/analyze_alignments.log
+2 warnings in exp2/tri4a/log/init_model.log
+2 warnings in exp2/tri4a/log/questions.log
+steps/train_sat.sh: Likelihood evolution:
+-53.4164 -52.7642 -52.602 -52.4465 -51.8127 -51.0842 -50.619 -50.2893 -50.0274 -49.5781 -49.4098 -49.0231 -48.8794 -48.7816 -48.6961 -48.6197 -48.5496 -48.4837 -48.4223 -48.2943 -48.2187 -48.1712 -48.1285 -48.0879 -48.0489 -48.0115 -47.9753 -47.9406 -47.9075 -47.8389 -47.7916 -47.7682 -47.7527 -47.7415 
+exp2/tri4a: nj=30 align prob=-51.91 over 88.69h [retry=1.5%, fail=0.3%] states=3992 gauss=80077 fmllr-impr=nan over 56.25h tree-impr=5.37
+steps/train_sat.sh: done training SAT system in exp2/tri4a
+
+real	71m7.237s
+user	882m30.490s
+sys	29m58.822s
+steps/align_fmllr.sh --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp2/tri4a exp2/tri4a_ali
+steps/align_fmllr.sh: feature type is lda
+steps/align_fmllr.sh: compiling training graphs
+steps/align_fmllr.sh: aligning data in data/st_ihm_all/train using exp2/tri4a/final.alimdl and speaker-independent features.
+steps/align_fmllr.sh: computing fMLLR transforms
+steps/align_fmllr.sh: doing final alignment.
+steps/align_fmllr.sh: done aligning data.
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp2/tri4a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 9.51379806976% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 47.5135331998% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp2/tri4a_ali/log/analyze_alignments.log
+2608 warnings in exp2/tri4a_ali/log/align_pass1.*.log
+2 warnings in exp2/tri4a_ali/log/analyze_alignments.log
+13376 warnings in exp2/tri4a_ali/log/fmllr.*.log
+2388 warnings in exp2/tri4a_ali/log/align_pass2.*.log
+
+real	21m33.616s
+user	284m17.555s
+sys	2m38.681s
+./run.sh: line 149: exp2/tri4a/graph_st2.o3g.kn.pr1-7/mkgraph.log: No such file or directory
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.002s
+steps/decode_fmllr.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+cat: exp2/tri4a/graph_st2.o3g.kn.pr1-7/phones/silence.csl: No such file or directory

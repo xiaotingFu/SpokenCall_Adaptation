@@ -1,0 +1,46 @@
+step: 6
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+tree-info exp2/tri4a/tree 
+tree-info exp2/tri4a/tree 
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data/lang_st2.o3g.kn.pr1-7/phones/disambig.int --write-disambig-syms=data/lang_st2.o3g.kn.pr1-7/tmp/disambig_ilabels_3_1.int data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_3_1.16328 
+fstisstochastic data/lang_st2.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+0.148993 0
+[info]: CLG not stochastic.
+make-h-transducer --disambig-syms-out=exp2/tri4a/graph_st2.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_3_1 exp2/tri4a/tree exp2/tri4a/final.mdl 
+fstrmsymbols exp2/tri4a/graph_st2.o3g.kn.pr1-7/disambig_tid.int 
+fstrmepslocal 
+fstminimizeencoded 
+fsttablecompose exp2/tri4a/graph_st2.o3g.kn.pr1-7/Ha.fst data/lang_st2.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp2/tri4a/graph_st2.o3g.kn.pr1-7/HCLGa.fst 
+0.528171 -0.000486971
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp2/tri4a/final.mdl 
+
+real	0m35.026s
+user	0m34.896s
+sys	0m1.247s
+steps/decode_fmllr.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.05 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+steps/decode.sh --scoring-opts  --num-threads 1 --skip-scoring false --acwt 0.05 --nj 15 --cmd run.pl --mem 20G --beam 8.0 --model exp2/tri4a/final.alimdl --max-active 2000 exp2/tri4a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si
+decode.sh: feature type is lda
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp2/tri4a/graph_st2.o3g.kn.pr1-7 exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si
+steps/diagnostic/analyze_lats.sh: see stats in exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,16,206) and mean=78.5
+steps/diagnostic/analyze_lats.sh: see stats in exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp2/tri4a/graph_st2.o3g.kn.pr1-7 exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+steps/decode_fmllr.sh: feature type is lda
+steps/decode_fmllr.sh: getting first-pass fMLLR transforms.
+steps/decode_fmllr.sh: doing main lattice generation phase
+steps/decode_fmllr.sh: estimating fMLLR transforms a second time.
+steps/decode_fmllr.sh: doing a final pass of acoustic rescoring.
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp2/tri4a/graph_st2.o3g.kn.pr1-7 exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+steps/diagnostic/analyze_lats.sh: see stats in exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,2,114) and mean=43.0
+steps/diagnostic/analyze_lats.sh: see stats in exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp2/tri4a/graph_st2.o3g.kn.pr1-7 exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	19m5.754s
+user	183m23.503s
+sys	1m38.557s

@@ -1,0 +1,116 @@
+step: 2
+                        Step 2 : train monophone model                                   
+steps/train_mono.sh --nj 30 --cmd run.pl --mem 20G data/sharedTask2nd/train_5k data/lang_v1 exp4/mono
+steps/train_mono.sh: Initializing monophone system.
+steps/train_mono.sh: Compiling training graphs
+steps/train_mono.sh: Aligning data equally (pass 0)
+steps/train_mono.sh: Pass 1
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 2
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 3
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 4
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 5
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 6
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 7
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 8
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 9
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 10
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 11
+steps/train_mono.sh: Pass 12
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 13
+steps/train_mono.sh: Pass 14
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 15
+steps/train_mono.sh: Pass 16
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 17
+steps/train_mono.sh: Pass 18
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 19
+steps/train_mono.sh: Pass 20
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 21
+steps/train_mono.sh: Pass 22
+steps/train_mono.sh: Pass 23
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 24
+steps/train_mono.sh: Pass 25
+steps/train_mono.sh: Pass 26
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 27
+steps/train_mono.sh: Pass 28
+steps/train_mono.sh: Pass 29
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 30
+steps/train_mono.sh: Pass 31
+steps/train_mono.sh: Pass 32
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 33
+steps/train_mono.sh: Pass 34
+steps/train_mono.sh: Pass 35
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 36
+steps/train_mono.sh: Pass 37
+steps/train_mono.sh: Pass 38
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 39
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp4/mono
+steps/diagnostic/analyze_alignments.sh: see stats in exp4/mono/log/analyze_alignments.log
+5439 warnings in exp4/mono/log/align.*.*.log
+182 warnings in exp4/mono/log/acc.*.*.log
+5080 warnings in exp4/mono/log/update.*.log
+exp4/mono: nj=30 align prob=-101.43 over 4.53h [retry=0.2%, fail=0.0%] states=137 gauss=978
+steps/train_mono.sh: Done training monophone system in exp4/mono
+
+real	12m16.358s
+user	162m3.780s
+sys	2m34.661s
+steps/align_si.sh --nj 30 --cmd run.pl --mem 20G data/sharedTask2nd/train_5k data/lang_v1 exp4/mono exp4/mono_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/sharedTask2nd/train_5k using model from exp4/mono, putting alignments in exp4/mono_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp4/mono_ali
+steps/diagnostic/analyze_alignments.sh: see stats in exp4/mono_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+
+real	0m35.648s
+user	7m58.949s
+sys	0m6.140s
+Decode MonoPhone Model
+tree-info exp4/mono/tree 
+tree-info exp4/mono/tree 
+make-h-transducer --disambig-syms-out=exp4/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_1_0 exp4/mono/tree exp4/mono/final.mdl 
+fstminimizeencoded 
+fsttablecompose exp4/mono/graph_st2.o3g.kn.pr1-7/Ha.fst data/lang_st2.o3g.kn.pr1-7/tmp/CLG_1_0.fst 
+fstrmepslocal 
+fstrmsymbols exp4/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp4/mono/graph_st2.o3g.kn.pr1-7/HCLGa.fst 
+0.297288 -0.00095604
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp4/mono/final.mdl 
+
+real	0m11.628s
+user	0m11.948s
+sys	0m0.493s
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp4/mono/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp4/mono/graph_st2.o3g.kn.pr1-7 exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,2,3) and mean=2.2
+steps/diagnostic/analyze_lats.sh: see stats in exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp4/mono/graph_st2.o3g.kn.pr1-7 exp4/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	4m20.824s
+user	43m57.444s
+sys	0m12.508s
