@@ -52,15 +52,14 @@ if [ $step -le 1 ]; then
     ####################################################################################################
     ## Note: you can skip this if you use our provided features.
     # extract features for training data
-    #echo "Extract feature for training data"
-    #steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $data_dir $data_dir/log $data_dir/data
-    #steps/compute_cmvn_stats.sh $data_dir $data_dir/log $data_dir/data
+    echo "Extract feature for training data"
+    steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $data_dir $data_dir/log $data_dir/data
+    steps/compute_cmvn_stats.sh $data_dir $data_dir/log $data_dir/data
     echo "Extract feature for testing data"
     # extract features for test data
     steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" $test $test/log $test/data
     steps/compute_cmvn_stats.sh $test $test/log $test/data
     echo "Finished Feature extraction"
-    exit 0
 fi
 
 if [ $step -le 2 ]; then
@@ -87,7 +86,6 @@ if [ $step -le 2 ]; then
     time steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --skip-scoring false --config conf/decode.conf --acwt $acwt\
          $graph_dir $test ${exp_dir}/mono/decode_st.test_${LM}_acwt$acwt
     )&
-    exit 0
 fi
 
 if [ $step -le 3 ]; then
