@@ -60,3 +60,63 @@ steps/train_mono.sh: Pass 33
 steps/train_mono.sh: Pass 34
 steps/train_mono.sh: Pass 35
 steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 36
+steps/train_mono.sh: Pass 37
+steps/train_mono.sh: Pass 38
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 39
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp5/mono
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 51.77106263758255% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 79.79787872723634% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp5/mono/log/analyze_alignments.log
+2 warnings in exp5/mono/log/analyze_alignments.log
+400 warnings in exp5/mono/log/update.*.log
+11767 warnings in exp5/mono/log/align.*.*.log
+536 warnings in exp5/mono/log/acc.*.*.log
+exp5/mono: nj=30 align prob=-100.75 over 8.00h [retry=1.4%, fail=0.1%] states=137 gauss=982
+steps/train_mono.sh: Done training monophone system in exp5/mono
+
+real	16m44.827s
+user	224m51.410s
+sys	2m59.168s
+steps/align_si.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/lang_v1 exp5/mono exp5/mono_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train_10k using model from exp5/mono, putting alignments in exp5/mono_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp5/mono_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 51.83109865919552% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 79.83790274164498% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp5/mono_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+
+real	0m53.508s
+user	10m18.270s
+sys	0m9.453s
+Decode MonoPhone Model
+tree-info exp5/mono/tree 
+tree-info exp5/mono/tree 
+make-h-transducer --disambig-syms-out=exp5/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_1_0 exp5/mono/tree exp5/mono/final.mdl 
+fstrmepslocal 
+fstdeterminizestar --use-log=true 
+fstminimizeencoded 
+fstrmsymbols exp5/mono/graph_st2.o3g.kn.pr1-7/disambig_tid.int 
+fsttablecompose exp5/mono/graph_st2.o3g.kn.pr1-7/Ha.fst data/lang_st2.o3g.kn.pr1-7/tmp/CLG_1_0.fst 
+fstisstochastic exp5/mono/graph_st2.o3g.kn.pr1-7/HCLGa.fst 
+1.37793 -1.68652
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp5/mono/final.mdl 
+
+real	0m15.461s
+user	0m15.597s
+sys	0m0.537s
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --skip-scoring false --config conf/decode.conf --acwt 0.06 exp5/mono/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp5/mono/graph_st2.o3g.kn.pr1-7 exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(2,20,129) and mean=49.1
+steps/diagnostic/analyze_lats.sh: see stats in exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp5/mono/graph_st2.o3g.kn.pr1-7 exp5/mono/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	9m21.961s
+user	89m16.906s
+sys	0m33.816s

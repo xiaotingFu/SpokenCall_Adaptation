@@ -1,0 +1,140 @@
+step: 4
+                        Step 4 : tri2                                                    
+steps/train_deltas.sh --boost-silence 1.25 --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train_10k data/lang_v1 exp5/tri1_ali exp5/tri2a
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+** The warnings above about 'no stats' generally mean you have phones **
+** (or groups of phones) in your phone set that had no corresponding data. **
+** You should probably figure out whether something went wrong, **
+** or whether your data just doesn't happen to have examples of those **
+** phones. **
+steps/train_deltas.sh: converting alignments from exp5/tri1_ali to use current tree
+steps/train_deltas.sh: compiling graphs of transcripts
+steps/train_deltas.sh: training pass 1
+steps/train_deltas.sh: training pass 2
+steps/train_deltas.sh: training pass 3
+steps/train_deltas.sh: training pass 4
+steps/train_deltas.sh: training pass 5
+steps/train_deltas.sh: training pass 6
+steps/train_deltas.sh: training pass 7
+steps/train_deltas.sh: training pass 8
+steps/train_deltas.sh: training pass 9
+steps/train_deltas.sh: training pass 10
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 11
+steps/train_deltas.sh: training pass 12
+steps/train_deltas.sh: training pass 13
+steps/train_deltas.sh: training pass 14
+steps/train_deltas.sh: training pass 15
+steps/train_deltas.sh: training pass 16
+steps/train_deltas.sh: training pass 17
+steps/train_deltas.sh: training pass 18
+steps/train_deltas.sh: training pass 19
+steps/train_deltas.sh: training pass 20
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 21
+steps/train_deltas.sh: training pass 22
+steps/train_deltas.sh: training pass 23
+steps/train_deltas.sh: training pass 24
+steps/train_deltas.sh: training pass 25
+steps/train_deltas.sh: training pass 26
+steps/train_deltas.sh: training pass 27
+steps/train_deltas.sh: training pass 28
+steps/train_deltas.sh: training pass 29
+steps/train_deltas.sh: training pass 30
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 31
+steps/train_deltas.sh: training pass 32
+steps/train_deltas.sh: training pass 33
+steps/train_deltas.sh: training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp5/tri2a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 50.34020412247349% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 78.17690614368621% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp5/tri2a/log/analyze_alignments.log
+1 warnings in exp5/tri2a/log/build_tree.log
+2 warnings in exp5/tri2a/log/questions.log
+2 warnings in exp5/tri2a/log/analyze_alignments.log
+1511 warnings in exp5/tri2a/log/update.*.log
+139 warnings in exp5/tri2a/log/init_model.log
+204 warnings in exp5/tri2a/log/acc.*.*.log
+263 warnings in exp5/tri2a/log/align.*.*.log
+exp5/tri2a: nj=30 align prob=-95.64 over 8.00h [retry=0.4%, fail=0.1%] states=1480 gauss=80186 tree-impr=3.11
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp5/tri2a
+steps/align_si.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/lang_v1 exp5/tri2a exp5/tri2a_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train_10k using model from exp5/tri2a, putting alignments in exp5/tri2a_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp5/tri2a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 50.34020412247349% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 78.19691815089054% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp5/tri2a_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+tree-info exp5/tri2a/tree 
+tree-info exp5/tri2a/tree 
+make-h-transducer --disambig-syms-out=exp5/tri2a/graph_st2.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st2.o3g.kn.pr1-7/tmp/ilabels_3_1 exp5/tri2a/tree exp5/tri2a/final.mdl 
+fstrmepslocal 
+fstdeterminizestar --use-log=true 
+fstminimizeencoded 
+fstrmsymbols exp5/tri2a/graph_st2.o3g.kn.pr1-7/disambig_tid.int 
+fsttablecompose exp5/tri2a/graph_st2.o3g.kn.pr1-7/Ha.fst data/lang_st2.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+fstisstochastic exp5/tri2a/graph_st2.o3g.kn.pr1-7/HCLGa.fst 
+1.37793 -1.68623
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp5/tri2a/final.mdl 
+                        Step 5 : tri3, MLLT+LDA                                          
+steps/decode.sh --nj 15 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp5/tri2a/graph_st2.o3g.kn.pr1-7 data/sharedTask2nd_test exp5/tri2a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/train_lda_mllt.sh --boost-silence 1.25 --cmd run.pl --mem 20G --splice-opts --left-context=3 --right-context=3 5000 80000 data/st_ihm_all/train_10k data/lang_v1 exp5/tri2a_ali exp5/tri3a
+decode.sh: feature type is delta
+steps/train_lda_mllt.sh: Accumulating LDA statistics.
+steps/train_lda_mllt.sh: Accumulating tree stats
+steps/train_lda_mllt.sh: Getting questions for tree clustering.
+steps/train_lda_mllt.sh: Building the tree
+steps/train_lda_mllt.sh: Initializing the model
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+This is a bad warning.
+steps/train_lda_mllt.sh: Converting alignments from exp5/tri2a_ali to use current tree
+steps/train_lda_mllt.sh: Compiling graphs of transcripts
+Training pass 1
+Training pass 2
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 3
+Training pass 4
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 5
+Training pass 6
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 7
+Training pass 8
+Training pass 9
+Training pass 10
+Aligning data
+Training pass 11
+Training pass 12
+steps/train_lda_mllt.sh: Estimating MLLT
+Training pass 13
+Training pass 14
+Training pass 15
+Training pass 16
+Training pass 17
+Training pass 18
+Training pass 19
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp5/tri2a/graph_st2.o3g.kn.pr1-7 exp5/tri2a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp5/tri2a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(2,15,67) and mean=27.2
+steps/diagnostic/analyze_lats.sh: see stats in exp5/tri2a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp5/tri2a/graph_st2.o3g.kn.pr1-7 exp5/tri2a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+Training pass 20
+Aligning data
+Training pass 21
+Training pass 22
+Training pass 23
+Training pass 24
+Training pass 25
+Training pass 26
+./run.sh: line 145:   886 Killed                  steps/train_lda_mllt.sh --boost-silence $boost_sil --cmd "$train_cmd" --splice-opts "--left-context=3 --right-context=3" $numLeavesTri3 $numGaussTri3 $data_dir $lang ${exp_dir}/tri2a_ali ${exp_dir}/tri3a
+steps/align_fmllr.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_10k data/lang_v1 exp5/tri3a exp5/tri3a_ali
+cp: cannot stat 'exp5/tri3a/final.mdl': No such file or directory
