@@ -74,7 +74,7 @@ def prepareKaldiTestData(prefix, dest):
             for row in readCSV:
                 if row_number!=0:
                     utt_id = prefix + '_' + str(row[0])
-                    utterance = processUtterance(str(row[3]) 
+                    utterance = processUtterance(str(row[3])) 
                     # Prepare text alignment file
                     # File: text
                     # utt_id    WORD1 WORD2 WORD3 WORD4 ...
@@ -132,7 +132,7 @@ def prepareKaldiTestData_textonly(prefix, dest):
             for row in readCSV:
                 if row_number!=0:
                     utt_id = prefix + '_' + str(row[0])
-                    utterance = processUtterance(str(row[3]) 
+                    utterance = processUtterance(str(row[3])) 
                     # Prepare text alignment file
                     # File: text
                     # utt_id    WORD1 WORD2 WORD3 WORD4 ...
@@ -142,13 +142,7 @@ def prepareKaldiTestData_textonly(prefix, dest):
                         out.write(text_line)
                 row_number=row_number+1
 def processUtterance(utt): 
-    new_utt = utt
-    if "silence" in utt:
-        new_utt.replace("silence","<sil>")
-    elif "xxx" in utt:
-        new_utt.replace("xxx","<unk>")
-    elif "*" in utt:
-        new_utt.replace("*","")
+    new_utt=utt.replace("silence","<sil>").replace("xxx","<unk>").replace("*","")
     return new_utt.upper()
       
 def prepareKaldiData(prefix, csvPath,audioPath, dest):
