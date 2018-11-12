@@ -7,6 +7,13 @@ However, the result is somehow very weird.
 
 The WER tested in tri4a is listed below
 ```bash
+# word error rate
+[xfu7@c74 s1]$ cat exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si/wer_20_1.0
+compute-wer --text --mode=present ark:exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05.si/scoring_kaldi/test_filt.txt ark,p:-
+%WER 100.00 [ 5406 / 5406, 0 ins, 4595 del, 811 sub ]
+%SER 100.00 [ 1000 / 1000 ]
+Scored 1000 sentences, 0 not present in hyp.
+
 # lattice_depth_stats
 cat exp2/tri4a/decode_st.test_st2.o3g.kn.pr1-7_acwt0.05/log/analyze_lattice_depth_stats.log
 
