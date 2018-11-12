@@ -184,3 +184,6 @@ sys     3m7.969s
 real    34m3.523s
 user    435m42.747s
 sys     2m59.304s
+
+
+Triphone training takes 1300 hours
