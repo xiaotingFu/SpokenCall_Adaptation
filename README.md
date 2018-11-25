@@ -28,6 +28,7 @@ SharedTask2nd
 ```
 
 ## Data preparation
+
 ```bash
 # Preparing data for training use data from sharedTask2nd 
 # Trainning file location:
@@ -81,3 +82,17 @@ sc2-41338 /home/xfu7/data/sharedTask2nd/test/audio/41338.wav
 5531 st_ihm20_psgAll/train10/wav.scp
 ```
 
+
+## One More Step in Data preparation
+
+Better understanding of the transcription is required to process the text.
+As Mengjie said:
+```
+In the SharedTask transcriptions, different symbols have specific meanings, see below:
+*v: foreign word, 
+*z: mispronunced word,
+*a: incomplete word,
+*x: indistinct word,
+xxx/-xxx means unknown word/words/part of a word,
+ggg: non-speech noise.
+```
