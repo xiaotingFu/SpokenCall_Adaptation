@@ -1,7 +1,7 @@
 #!/bin/bash
 # Scripts for ASR Training for 2nd edition of Spoken Call task
 # Xiaoting Fu 2018-10-26
-step=1
+step=2
 
 . ./cmd.sh
 . ./path.sh
@@ -9,7 +9,7 @@ step=1
 ### parameters (part 1)
 nj=30
 nj_decode=30
-set=7
+set=1_st_only
 boost_sil=1.25
 
 numLeavesTri1=5000
@@ -21,9 +21,9 @@ numGaussTri4=80000
 exp_dir=exp${set}                        # directory for saving models and results
 # data_dir=data/sharedTask2nd/st_ihm_all/train${set}
 #data_dir=data/st_ihm_all/train_10k # train with 5K ST12+ 10K AMI
-data_dir_5k=data/st_ihm_all/train_5k
+#data_dir_5k=data/st_ihm_all/train_5k
 data_dir=data/sharedTask2nd/all
-data_dir=data/st_ihm_all/train
+#data_dir=data/st_ihm_all/train
 
 data_dir_sub=data/sharedTask2nd/all
 test=data/sharedTask2nd_test
@@ -62,7 +62,6 @@ if [ $step -le 1 ]; then
     steps/make_mfcc.sh --nj 30 --cmd "$train_cmd" $test $test/log $test/data
     steps/compute_cmvn_stats.sh $test $test/log $test/data
     echo "Finished Feature extraction"
-exit 0
 fi
 
 if [ $step -le 2 ]; then
@@ -146,7 +145,6 @@ if [ $step -le 5 ]; then
      acwt=0.06
      ( steps/decode.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
          $graph_dir $test ${exp_dir}/tri3a/decode_st.test_${LM}_acwt$acwt )&
-exit 0
 fi
 
 if [ $step -le 6 ]; then
@@ -166,6 +164,9 @@ if [ $step -le 6 ]; then
     time steps/decode_fmllr.sh --nj $nj_decode --cmd "$decode_cmd" --config conf/decode.conf --acwt $acwt\
         $graph_dir $test ${exp_dir}/tri4a/decode_st.test_${LM}_acwt$acwt
 fi
+exit 0
+
+echo "Done with GMM-HMM System Training"
 
     ## parameters (part 2)
     # parameter for extract fmllr features
