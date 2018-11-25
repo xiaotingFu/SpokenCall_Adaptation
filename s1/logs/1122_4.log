@@ -1,0 +1,17 @@
+step: 1
+                        Step 1 : prepare data and extract features                       
+Extract feature for training data
+steps/make_mfcc.sh --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/st_ihm_all/train/log data/st_ihm_all/train/data
+steps/make_mfcc.sh: moving data/st_ihm_all/train/feats.scp to data/st_ihm_all/train/.backup
+steps/make_mfcc.sh [info]: segments file exists: using that.
+Succeeded creating MFCC features for train
+steps/compute_cmvn_stats.sh data/st_ihm_all/train data/st_ihm_all/train/log data/st_ihm_all/train/data
+Succeeded creating CMVN stats for train
+Extract feature for testing data
+steps/make_mfcc.sh --nj 30 --cmd run.pl --mem 20G data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+steps/make_mfcc.sh: moving data/sharedTask2nd_test/feats.scp to data/sharedTask2nd_test/.backup
+steps/make_mfcc.sh: [info]: no segments file exists: assuming wav.scp indexed by utterance.
+Succeeded creating MFCC features for sharedTask2nd_test
+steps/compute_cmvn_stats.sh data/sharedTask2nd_test data/sharedTask2nd_test/log data/sharedTask2nd_test/data
+Succeeded creating CMVN stats for sharedTask2nd_test
+Finished Feature extraction

@@ -1,0 +1,5 @@
+step: 8
+                        Step 8 : train dnn model with tri4a gmm model                    
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp5/tri4a/graph_st5.o3g.kn.pr1-7 exp5/data-fmllr-tri4/sharedTask2nd_Test exp5/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st5.o3g.kn.pr1-7_acwt0.05
+local/score.sh --min-lmwt 4 --max-lmwt 15 --cmd run.pl --gpu 1 --mem 20G exp5/data-fmllr-tri4/sharedTask2nd_Test exp5/tri4a/graph_st5.o3g.kn.pr1-7 exp5/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st5.o3g.kn.pr1-7_acwt0.05
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0

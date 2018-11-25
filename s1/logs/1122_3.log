@@ -1,0 +1,96 @@
+step: 5
+                        Step 5 : tri3, MLLT+LDA                                          
+steps/train_lda_mllt.sh --boost-silence 1.25 --cmd run.pl --mem 20G --splice-opts --left-context=3 --right-context=3 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/tri2a_ali exp7/tri3a
+steps/train_lda_mllt.sh: Accumulating LDA statistics.
+steps/train_lda_mllt.sh: line 116: 29970 Segmentation fault      est-lda --write-full-matrix=$dir/full.mat --dim=$dim $dir/0.mat $dir/lda.*.acc 2> $dir/log/lda_est.log
+
+real	0m13.672s
+user	6m19.875s
+sys	0m15.227s
+steps/align_fmllr.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri3a exp7/tri3a_ali
+cp: cannot stat 'exp7/tri3a/tree': No such file or directory
+cp: cannot stat 'exp7/tri3a/final.mdl': No such file or directory
+mkgraph.sh: expected exp7/tri3a/final.mdl to exist
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp7/tri3a/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri3a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+steps/train_sat.sh --boost-silence 1.25 --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/tri3a_ali exp7/tri4a
+train_sat.sh: no such file exp7/tri3a_ali/final.mdl
+
+real	0m0.012s
+user	0m0.008s
+sys	0m0.005s
+steps/align_fmllr.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri4a exp7/tri4a_ali
+decode.sh: no such file exp7/tri3a/final.mdl
+cp: cannot stat 'exp7/tri4a/tree': No such file or directory
+cp: cannot stat 'exp7/tri4a/final.mdl': No such file or directory
+
+real	0m0.028s
+user	0m0.034s
+sys	0m0.031s
+mkgraph.sh: expected exp7/tri4a/final.mdl to exist
+
+real	0m0.009s
+user	0m0.002s
+sys	0m0.005s
+steps/decode_fmllr.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+cat: exp7/tri4a/graph_st7.o3g.kn.pr1-7/phones/silence.csl: No such file or directory
+
+real	0m0.036s
+user	0m0.020s
+sys	0m0.020s
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05 exp7/data-fmllr-tri4/sharedTask2nd_Test data/sharedTask2nd_test exp7/tri4a exp7/data-fmllr-tri4/sharedTask2nd_Test/log exp7/data-fmllr-tri4/sharedTask2nd_Test/data
+steps/nnet/make_fmllr_feats.sh: Missing exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05/trans.1
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp7/tri4a_ali exp7/data-fmllr-tri4/train7 data/st_ihm_all/train exp7/tri4a exp7/data-fmllr-tri4/train7/log exp7/data-fmllr-tri4/train7/data
+steps/nnet/make_fmllr_feats.sh: Missing exp7/tri4a_ali/trans.1
+Missing 'exp7/data-fmllr-tri4/train7/spk2utt'. Error!
+                        Step 8 : train dnn model with tri4a gmm model                    
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_6_1024/log/pretrain_dbn.log
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_dnn_6_1024/log/train_nnet.log
+                        Step 9 : align dnn model and prepare for retraining model        
+steps/nnet/align.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G exp7/data-fmllr-tri4/train7_tr90 data/lang_v1 exp7/dnn4_pretrain-dbn_dnn_6_1024 exp7/dnn4_pretrain-dbn_dnn_6_1024_ali
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 exp7/data-fmllr-tri4/sharedTask2nd_Test exp7/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+steps/nnet/decode.sh: missing file exp7/data-fmllr-tri4/sharedTask2nd_Test/split30/1/feats.scp
+cp: cannot stat 'exp7/dnn4_pretrain-dbn_dnn_6_1024/tree': No such file or directory
+cp: cannot stat 'exp7/dnn4_pretrain-dbn_dnn_6_1024/final.mdl': No such file or directory
+nnet-copy --binary=false exp7/dnn4_pretrain-dbn_dnn_6_1024/final.nnet exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet 
+ERROR (nnet-copy[5.4.105~1-4fda]:Input():kaldi-io.cc:756) Error opening input stream exp7/dnn4_pretrain-dbn_dnn_6_1024/final.nnet
+
+[ Stack-Trace: ]
+nnet-copy() [0x66dcaa]
+kaldi::MessageLogger::HandleMessage(kaldi::LogMessageEnvelope const&, char const*)
+kaldi::MessageLogger::~MessageLogger()
+kaldi::Input::Input(std::string const&, bool*)
+main
+__libc_start_main
+nnet-copy() [0x4e1419]
+
+Traceback (most recent call last):
+  File "dnn2dbn.py", line 3, in <module>
+    with open(sys.argv[1], 'r') as theFile:
+IOError: [Errno 2] No such file or directory: 'exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet'
+nnet-copy exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn exp7/dnn4_pretrain-dbn_dnn_6_1024/final.dbn 
+ERROR (nnet-copy[5.4.105~1-4fda]:Input():kaldi-io.cc:756) Error opening input stream exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn
+
+[ Stack-Trace: ]
+nnet-copy() [0x66dcaa]
+kaldi::MessageLogger::HandleMessage(kaldi::LogMessageEnvelope const&, char const*)
+kaldi::MessageLogger::~MessageLogger()
+kaldi::Input::Input(std::string const&, bool*)
+main
+__libc_start_main
+nnet-copy() [0x4e1419]
+
+subset_data_dir.sh: no such file exp7/data-fmllr-tri4/train7/utt2spk
+                        Step 10 : finetune dnn4 with only st data                        
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_dnn_6_1024_reST/log/train_nnet.log
+
+real	0m1.488s
+user	0m0.026s
+sys	0m0.699s
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 exp7/data-fmllr-tri4/sharedTask2nd_Test exp7/dnn4_pretrain-dbn_dnn_6_1024_reST/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+steps/nnet/decode.sh: missing file exp7/data-fmllr-tri4/sharedTask2nd_Test/split30/1/feats.scp
+
+real	0m0.025s
+user	0m0.012s
+sys	0m0.016s

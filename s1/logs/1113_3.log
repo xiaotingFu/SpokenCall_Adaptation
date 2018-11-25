@@ -1,0 +1,40 @@
+step: 7
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp6/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05 exp6/data-fmllr-tri4/sharedTask2nd_Test data/sharedTask2nd_test exp6/tri4a exp6/data-fmllr-tri4/sharedTask2nd_Test/log exp6/data-fmllr-tri4/sharedTask2nd_Test/data
+steps/nnet/make_fmllr_feats.sh: feature type is lda_fmllr
+utils/copy_data_dir.sh: copied data from data/sharedTask2nd_test to exp6/data-fmllr-tri4/sharedTask2nd_Test
+utils/validate_data_dir.sh: Successfully validated data-directory exp6/data-fmllr-tri4/sharedTask2nd_Test
+steps/nnet/make_fmllr_feats.sh: Done!, type lda_fmllr, data/sharedTask2nd_test --> exp6/data-fmllr-tri4/sharedTask2nd_Test, using : raw-trans None, gmm exp6/tri4a, trans exp6/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp6/tri4a_ali exp6/data-fmllr-tri4/train6 data/sharedTask2nd/all exp6/tri4a exp6/data-fmllr-tri4/train6/log exp6/data-fmllr-tri4/train6/data
+steps/nnet/make_fmllr_feats.sh: feature type is lda_fmllr
+utils/copy_data_dir.sh: copied data from data/sharedTask2nd/all to exp6/data-fmllr-tri4/train6
+utils/validate_data_dir.sh: Successfully validated data-directory exp6/data-fmllr-tri4/train6
+steps/nnet/make_fmllr_feats.sh: Done!, type lda_fmllr, data/sharedTask2nd/all --> exp6/data-fmllr-tri4/train6, using : raw-trans None, gmm exp6/tri4a, trans exp6/tri4a_ali
+Speakers, src=12914, trn=11623, cv=1291 /tmp/xfu7_j1g6Z/speakers_cv
+utils/data/subset_data_dir.sh: reducing #utt from 12914 to 11623
+utils/data/subset_data_dir.sh: reducing #utt from 12914 to 1291
+                        Step 8 : train dnn model with tri4a gmm model                    
+                        Step 9 : align dnn model and prepare for retraining model        
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp6/tri4a/graph_st6.o3g.kn.pr1-7 exp6/data-fmllr-tri4/sharedTask2nd_Test exp6/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05
+steps/nnet/align.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G exp6/data-fmllr-tri4/train6_tr90 data/lang_v1 exp6/dnn4_pretrain-dbn_dnn_6_1024 exp6/dnn4_pretrain-dbn_dnn_6_1024_ali
+steps/nnet/align.sh: aligning data 'exp6/data-fmllr-tri4/train6_tr90' using nnet/model 'exp6/dnn4_pretrain-dbn_dnn_6_1024', putting alignments in 'exp6/dnn4_pretrain-dbn_dnn_6_1024_ali'
+steps/nnet/align.sh: done aligning data.
+nnet-copy --binary=false exp6/dnn4_pretrain-dbn_dnn_6_1024/final.nnet exp6/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet 
+LOG (nnet-copy[5.4.105~1-4fda]:main():nnet-copy.cc:145) Written 'nnet1' to exp6/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet
+nnet-copy exp6/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn exp6/dnn4_pretrain-dbn_dnn_6_1024/final.dbn 
+LOG (nnet-copy[5.4.105~1-4fda]:main():nnet-copy.cc:145) Written 'nnet1' to exp6/dnn4_pretrain-dbn_dnn_6_1024/final.dbn
+utils/subset_data_dir.sh: reducing #utt from 12914 to 0
+                        Step 10 : finetune dnn4 with only st data                        
+run.pl: job failed, log is in exp6/dnn4_pretrain-dbn_dnn_6_1024_reST/log/train_nnet.log
+
+real	0m8.998s
+user	0m10.569s
+sys	0m1.685s
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp6/tri4a/graph_st6.o3g.kn.pr1-7 exp6/data-fmllr-tri4/sharedTask2nd_Test exp6/dnn4_pretrain-dbn_dnn_6_1024_reST/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05
+steps/nnet/decode.sh: missing file exp6/dnn4_pretrain-dbn_dnn_6_1024_reST/final.nnet
+
+real	0m0.106s
+user	0m0.037s
+sys	0m0.095s
+local/score.sh --min-lmwt 4 --max-lmwt 15 --cmd run.pl --gpu 1 --mem 20G exp6/data-fmllr-tri4/sharedTask2nd_Test exp6/tri4a/graph_st6.o3g.kn.pr1-7 exp6/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0

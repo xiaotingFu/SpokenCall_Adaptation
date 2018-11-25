@@ -1,0 +1,20 @@
+                Decode mono                 
+utils/mkgraph.sh: exp5/mono/graph_st5.o3g.kn.pr1-7/HCLG.fst is up to date.
+
+real	0m0.047s
+user	0m0.010s
+sys	0m0.010s
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --skip-scoring false --config conf/decode.conf --acwt 0.06 exp5/mono/graph_st5.o3g.kn.pr1-7 data/st_ihm_all/train_10k exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp5/mono/graph_st5.o3g.kn.pr1-7 exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 52.85% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 78.32% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_lats.sh: see stats in exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,17,324) and mean=116.1
+steps/diagnostic/analyze_lats.sh: see stats in exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/st_ihm_all/train_10k exp5/mono/graph_st5.o3g.kn.pr1-7 exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	78m8.443s
+user	981m46.176s
+sys	6m34.309s

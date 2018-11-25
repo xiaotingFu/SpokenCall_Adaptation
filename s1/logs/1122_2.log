@@ -1,0 +1,426 @@
+step: 2
+                        Step 2 : train monophone model                                   
+utils/subset_data_dir.sh: reducing #utt from 121135 to 5000
+steps/train_mono.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_5k data/lang_v1 exp7/mono
+filter_scps.pl: warning: some input lines were output to multiple files [OK if splitting per utt] 
+steps/train_mono.sh: Initializing monophone system.
+steps/train_mono.sh: Compiling training graphs
+steps/train_mono.sh: Aligning data equally (pass 0)
+steps/train_mono.sh: Pass 1
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 2
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 3
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 4
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 5
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 6
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 7
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 8
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 9
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 10
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 11
+steps/train_mono.sh: Pass 12
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 13
+steps/train_mono.sh: Pass 14
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 15
+steps/train_mono.sh: Pass 16
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 17
+steps/train_mono.sh: Pass 18
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 19
+steps/train_mono.sh: Pass 20
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 21
+steps/train_mono.sh: Pass 22
+steps/train_mono.sh: Pass 23
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 24
+steps/train_mono.sh: Pass 25
+steps/train_mono.sh: Pass 26
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 27
+steps/train_mono.sh: Pass 28
+steps/train_mono.sh: Pass 29
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 30
+steps/train_mono.sh: Pass 31
+steps/train_mono.sh: Pass 32
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 33
+steps/train_mono.sh: Pass 34
+steps/train_mono.sh: Pass 35
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 36
+steps/train_mono.sh: Pass 37
+steps/train_mono.sh: Pass 38
+steps/train_mono.sh: Aligning data
+steps/train_mono.sh: Pass 39
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/mono
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 20.4322593556% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 69.7618571143% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/mono/log/analyze_alignments.log
+400 warnings in exp7/mono/log/update.*.log
+2 warnings in exp7/mono/log/analyze_alignments.log
+6465 warnings in exp7/mono/log/align.*.*.log
+149 warnings in exp7/mono/log/acc.*.*.log
+exp7/mono: nj=30 align prob=-99.05 over 3.63h [retry=2.5%, fail=0.1%] states=137 gauss=980
+steps/train_mono.sh: Done training monophone system in exp7/mono
+
+real	3m40.651s
+user	79m11.216s
+sys	1m24.267s
+steps/align_si.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train_5k data/lang_v1 exp7/mono exp7/mono_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train_5k using model from exp7/mono, putting alignments in exp7/mono_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/mono_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 20.3321993196% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 69.9419651791% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/mono_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+
+real	0m9.641s
+user	4m4.111s
+sys	0m4.078s
+Decode MonoPhone Model
+tree-info exp7/mono/tree 
+tree-info exp7/mono/tree 
+fstpushspecial 
+fstminimizeencoded 
+fsttablecompose data/lang_st7.o3g.kn.pr1-7/L_disambig.fst data/lang_st7.o3g.kn.pr1-7/G.fst 
+fstdeterminizestar --use-log=true 
+fstisstochastic data/lang_st7.o3g.kn.pr1-7/tmp/LG.fst 
+-0.0646043 -0.0654925
+[info]: LG not stochastic.
+fstcomposecontext --context-size=1 --central-position=0 --read-disambig-syms=data/lang_st7.o3g.kn.pr1-7/phones/disambig.int --write-disambig-syms=data/lang_st7.o3g.kn.pr1-7/tmp/disambig_ilabels_1_0.int data/lang_st7.o3g.kn.pr1-7/tmp/ilabels_1_0.13534 
+fstisstochastic data/lang_st7.o3g.kn.pr1-7/tmp/CLG_1_0.fst 
+-0.0646043 -0.0654925
+[info]: CLG not stochastic.
+make-h-transducer --disambig-syms-out=exp7/mono/graph_st7.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st7.o3g.kn.pr1-7/tmp/ilabels_1_0 exp7/mono/tree exp7/mono/final.mdl 
+fsttablecompose exp7/mono/graph_st7.o3g.kn.pr1-7/Ha.fst data/lang_st7.o3g.kn.pr1-7/tmp/CLG_1_0.fst 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstrmepslocal 
+fstrmsymbols exp7/mono/graph_st7.o3g.kn.pr1-7/disambig_tid.int 
+fstisstochastic exp7/mono/graph_st7.o3g.kn.pr1-7/HCLGa.fst 
+0.000323947 -0.124458
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp7/mono/final.mdl 
+
+real	0m19.863s
+user	0m19.981s
+sys	0m0.542s
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --skip-scoring false --config conf/decode.conf --acwt 0.06 exp7/mono/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/mono/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp7/mono/graph_st7.o3g.kn.pr1-7 exp7/mono/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+run.pl: job failed, log is in exp7/mono/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp7/mono/graph_st7.o3g.kn.pr1-7 exp7/mono/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+
+real	3m14.908s
+user	58m1.225s
+sys	0m17.637s
+step: 3
+                        Step 3 : tri1                                                    
+steps/train_deltas.sh --boost-silence 1.25 --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/mono_ali exp7/tri1
+filter_scps.pl: warning: some input lines were output to multiple files [OK if splitting per utt] 
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+** The warnings above about 'no stats' generally mean you have phones **
+** (or groups of phones) in your phone set that had no corresponding data. **
+** You should probably figure out whether something went wrong, **
+** or whether your data just doesn't happen to have examples of those **
+** phones. **
+steps/train_deltas.sh: converting alignments from exp7/mono_ali to use current tree
+steps/train_deltas.sh: compiling graphs of transcripts
+steps/train_deltas.sh: training pass 1
+steps/train_deltas.sh: training pass 2
+steps/train_deltas.sh: training pass 3
+steps/train_deltas.sh: training pass 4
+steps/train_deltas.sh: training pass 5
+steps/train_deltas.sh: training pass 6
+steps/train_deltas.sh: training pass 7
+steps/train_deltas.sh: training pass 8
+steps/train_deltas.sh: training pass 9
+steps/train_deltas.sh: training pass 10
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 11
+steps/train_deltas.sh: training pass 12
+steps/train_deltas.sh: training pass 13
+steps/train_deltas.sh: training pass 14
+steps/train_deltas.sh: training pass 15
+steps/train_deltas.sh: training pass 16
+steps/train_deltas.sh: training pass 17
+steps/train_deltas.sh: training pass 18
+steps/train_deltas.sh: training pass 19
+steps/train_deltas.sh: training pass 20
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 21
+steps/train_deltas.sh: training pass 22
+steps/train_deltas.sh: training pass 23
+steps/train_deltas.sh: training pass 24
+steps/train_deltas.sh: training pass 25
+steps/train_deltas.sh: training pass 26
+steps/train_deltas.sh: training pass 27
+steps/train_deltas.sh: training pass 28
+steps/train_deltas.sh: training pass 29
+steps/train_deltas.sh: training pass 30
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 31
+steps/train_deltas.sh: training pass 32
+steps/train_deltas.sh: training pass 33
+steps/train_deltas.sh: training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/tri1
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 18.0785773366% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 65.8271298594% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/tri1/log/analyze_alignments.log
+10935 warnings in exp7/tri1/log/align.*.*.log
+157 warnings in exp7/tri1/log/init_model.log
+2 warnings in exp7/tri1/log/questions.log
+291 warnings in exp7/tri1/log/update.*.log
+1 warnings in exp7/tri1/log/build_tree.log
+1055102 warnings in exp7/tri1/log/acc.*.*.log
+2 warnings in exp7/tri1/log/analyze_alignments.log
+exp7/tri1: nj=30 align prob=-95.75 over 88.76h [retry=1.8%, fail=0.2%] states=1464 gauss=80330 tree-impr=3.43
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp7/tri1
+
+real	33m38.864s
+user	748m44.978s
+sys	10m35.372s
+steps/align_si.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri1 exp7/tri1_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train using model from exp7/tri1, putting alignments in exp7/tri1_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/tri1_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 17.8679548049% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 65.0159638704% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/tri1_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+tree-info exp7/tri1/tree 
+tree-info exp7/tri1/tree 
+fstcomposecontext --context-size=3 --central-position=1 --read-disambig-syms=data/lang_st7.o3g.kn.pr1-7/phones/disambig.int --write-disambig-syms=data/lang_st7.o3g.kn.pr1-7/tmp/disambig_ilabels_3_1.int data/lang_st7.o3g.kn.pr1-7/tmp/ilabels_3_1.12359 
+fstisstochastic data/lang_st7.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+0 -0.0654925
+[info]: CLG not stochastic.
+make-h-transducer --disambig-syms-out=exp7/tri1/graph_st7.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st7.o3g.kn.pr1-7/tmp/ilabels_3_1 exp7/tri1/tree exp7/tri1/final.mdl 
+fstrmepslocal 
+fsttablecompose exp7/tri1/graph_st7.o3g.kn.pr1-7/Ha.fst data/lang_st7.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+fstrmsymbols exp7/tri1/graph_st7.o3g.kn.pr1-7/disambig_tid.int 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp7/tri1/graph_st7.o3g.kn.pr1-7/HCLGa.fst 
+0.000487633 -0.181668
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp7/tri1/final.mdl 
+                        Step 4 : tri2                                                    
+steps/train_deltas.sh --boost-silence 1.25 --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/tri1_ali exp7/tri2a
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp7/tri1/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+decode.sh: feature type is delta
+steps/train_deltas.sh: accumulating tree stats
+steps/train_deltas.sh: getting questions for tree-building, via clustering
+steps/train_deltas.sh: building the tree
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10 
+WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15 
+** The warnings above about 'no stats' generally mean you have phones **
+** (or groups of phones) in your phone set that had no corresponding data. **
+** You should probably figure out whether something went wrong, **
+** or whether your data just doesn't happen to have examples of those **
+** phones. **
+steps/train_deltas.sh: converting alignments from exp7/tri1_ali to use current tree
+steps/train_deltas.sh: compiling graphs of transcripts
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp7/tri1/graph_st7.o3g.kn.pr1-7 exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,2,33) and mean=12.5
+steps/diagnostic/analyze_lats.sh: see stats in exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp7/tri1/graph_st7.o3g.kn.pr1-7 exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+steps/train_deltas.sh: training pass 1
+steps/train_deltas.sh: training pass 2
+steps/train_deltas.sh: training pass 3
+steps/train_deltas.sh: training pass 4
+steps/train_deltas.sh: training pass 5
+steps/train_deltas.sh: training pass 6
+steps/train_deltas.sh: training pass 7
+steps/train_deltas.sh: training pass 8
+steps/train_deltas.sh: training pass 9
+steps/train_deltas.sh: training pass 10
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 11
+steps/train_deltas.sh: training pass 12
+steps/train_deltas.sh: training pass 13
+steps/train_deltas.sh: training pass 14
+steps/train_deltas.sh: training pass 15
+steps/train_deltas.sh: training pass 16
+steps/train_deltas.sh: training pass 17
+steps/train_deltas.sh: training pass 18
+steps/train_deltas.sh: training pass 19
+steps/train_deltas.sh: training pass 20
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 21
+steps/train_deltas.sh: training pass 22
+steps/train_deltas.sh: training pass 23
+steps/train_deltas.sh: training pass 24
+steps/train_deltas.sh: training pass 25
+steps/train_deltas.sh: training pass 26
+steps/train_deltas.sh: training pass 27
+steps/train_deltas.sh: training pass 28
+steps/train_deltas.sh: training pass 29
+steps/train_deltas.sh: training pass 30
+steps/train_deltas.sh: aligning data
+steps/train_deltas.sh: training pass 31
+steps/train_deltas.sh: training pass 32
+steps/train_deltas.sh: training pass 33
+steps/train_deltas.sh: training pass 34
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/tri2a
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 17.7902993596% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 63.0260305482% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/tri2a/log/analyze_alignments.log
+68 warnings in exp7/tri2a/log/update.*.log
+2 warnings in exp7/tri2a/log/init_model.log
+9208 warnings in exp7/tri2a/log/acc.*.*.log
+2 warnings in exp7/tri2a/log/questions.log
+2 warnings in exp7/tri2a/log/analyze_alignments.log
+1 warnings in exp7/tri2a/log/build_tree.log
+9574 warnings in exp7/tri2a/log/align.*.*.log
+exp7/tri2a: nj=30 align prob=-96.02 over 88.73h [retry=2.1%, fail=0.2%] states=3880 gauss=80148 tree-impr=3.61
+steps/train_deltas.sh: Done training system with delta+delta-delta features in exp7/tri2a
+
+real	27m2.784s
+user	608m22.359s
+sys	10m37.337s
+steps/align_si.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri2a exp7/tri2a_ali
+steps/align_si.sh: feature type is delta
+steps/align_si.sh: aligning data in data/st_ihm_all/train using model from exp7/tri2a, putting alignments in exp7/tri2a_ali
+steps/diagnostic/analyze_alignments.sh --cmd run.pl --mem 20G data/lang_v1 exp7/tri2a_ali
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 17.7029811105% of the time at utterance begin.  This may not be optimal.
+analyze_phone_length_stats.py: WARNING: optional-silence sil is seen only 62.8978744177% of the time at utterance end.  This may not be optimal.
+steps/diagnostic/analyze_alignments.sh: see stats in exp7/tri2a_ali/log/analyze_alignments.log
+steps/align_si.sh: done aligning data.
+tree-info exp7/tri2a/tree 
+tree-info exp7/tri2a/tree 
+make-h-transducer --disambig-syms-out=exp7/tri2a/graph_st7.o3g.kn.pr1-7/disambig_tid.int --transition-scale=1.0 data/lang_st7.o3g.kn.pr1-7/tmp/ilabels_3_1 exp7/tri2a/tree exp7/tri2a/final.mdl 
+fstrmepslocal 
+fsttablecompose exp7/tri2a/graph_st7.o3g.kn.pr1-7/Ha.fst data/lang_st7.o3g.kn.pr1-7/tmp/CLG_3_1.fst 
+fstrmsymbols exp7/tri2a/graph_st7.o3g.kn.pr1-7/disambig_tid.int 
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fstisstochastic exp7/tri2a/graph_st7.o3g.kn.pr1-7/HCLGa.fst 
+0.000487633 -0.181873
+HCLGa is not stochastic
+add-self-loops --self-loop-scale=0.1 --reorder=true exp7/tri2a/final.mdl 
+                        Step 5 : tri3, MLLT+LDA                                          
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp7/tri2a/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+steps/train_lda_mllt.sh --boost-silence 1.25 --cmd run.pl --mem 20G --splice-opts --left-context=3 --right-context=3 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/tri2a_ali exp7/tri3a
+decode.sh: feature type is delta
+steps/train_lda_mllt.sh: Accumulating LDA statistics.
+steps/train_lda_mllt.sh: line 116: 12253 Segmentation fault      est-lda --write-full-matrix=$dir/full.mat --dim=$dim $dir/0.mat $dir/lda.*.acc 2> $dir/log/lda_est.log
+
+real	0m23.852s
+user	6m26.594s
+sys	0m17.066s
+steps/align_fmllr.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri3a exp7/tri3a_ali
+cp: cannot stat 'exp7/tri3a/tree': No such file or directory
+cp: cannot stat 'exp7/tri3a/final.mdl': No such file or directory
+mkgraph.sh: expected exp7/tri3a/final.mdl to exist
+                        Step 6 : tri4, MLLT+LDA+SAT                                      
+steps/decode.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.06 exp7/tri3a/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri3a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+steps/train_sat.sh --boost-silence 1.25 --cmd run.pl --mem 20G 5000 80000 data/st_ihm_all/train data/lang_v1 exp7/tri3a_ali exp7/tri4a
+train_sat.sh: no such file exp7/tri3a_ali/final.mdl
+
+real	0m0.065s
+user	0m0.013s
+sys	0m0.006s
+steps/align_fmllr.sh --boost-silence 1.25 --nj 30 --cmd run.pl --mem 20G data/st_ihm_all/train data/lang_v1 exp7/tri4a exp7/tri4a_ali
+decode.sh: no such file exp7/tri3a/final.mdl
+cp: cannot stat 'exp7/tri4a/tree': No such file or directory
+cp: cannot stat 'exp7/tri4a/final.mdl': No such file or directory
+
+real	0m0.087s
+user	0m0.044s
+sys	0m0.053s
+mkgraph.sh: expected exp7/tri4a/final.mdl to exist
+
+real	0m0.020s
+user	0m0.004s
+sys	0m0.008s
+steps/decode_fmllr.sh --nj 30 --cmd run.pl --mem 20G --config conf/decode.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 data/sharedTask2nd_test exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+cat: exp7/tri4a/graph_st7.o3g.kn.pr1-7/phones/silence.csl: No such file or directory
+
+real	0m0.092s
+user	0m0.025s
+sys	0m0.037s
+                        Step 7 : extract fmllr features                                  
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05 exp7/data-fmllr-tri4/sharedTask2nd_Test data/sharedTask2nd_test exp7/tri4a exp7/data-fmllr-tri4/sharedTask2nd_Test/log exp7/data-fmllr-tri4/sharedTask2nd_Test/data
+steps/nnet/make_fmllr_feats.sh: Missing exp7/tri4a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05/trans.1
+steps/nnet/make_fmllr_feats.sh --nj 30 --cmd run.pl --mem 20G --transform-dir exp7/tri4a_ali exp7/data-fmllr-tri4/train7 data/st_ihm_all/train exp7/tri4a exp7/data-fmllr-tri4/train7/log exp7/data-fmllr-tri4/train7/data
+steps/nnet/make_fmllr_feats.sh: Missing exp7/tri4a_ali/trans.1
+Missing 'exp7/data-fmllr-tri4/train7/spk2utt'. Error!
+                        Step 8 : train dnn model with tri4a gmm model                    
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_6_1024/log/pretrain_dbn.log
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_dnn_6_1024/log/train_nnet.log
+                        Step 9 : align dnn model and prepare for retraining model        
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 exp7/data-fmllr-tri4/sharedTask2nd_Test exp7/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+steps/nnet/align.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G exp7/data-fmllr-tri4/train7_tr90 data/lang_v1 exp7/dnn4_pretrain-dbn_dnn_6_1024 exp7/dnn4_pretrain-dbn_dnn_6_1024_ali
+cat: exp7/data-fmllr-tri4/train7_tr90/utt2spk: No such file or directory
+cat: exp7/data-fmllr-tri4/sharedTask2nd_Test/utt2spk: No such file or directory
+Failed to open utt2spk file exp7/data-fmllr-tri4/train7_tr90/utt2spk at utils/split_scp.pl line 85.
+Failed to open utt2spk file exp7/data-fmllr-tri4/sharedTask2nd_Test/utt2spk at utils/split_scp.pl line 85.
+nnet-copy --binary=false exp7/dnn4_pretrain-dbn_dnn_6_1024/final.nnet exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet 
+ERROR (nnet-copy[5.4.105~1-4fda]:Input():kaldi-io.cc:756) Error opening input stream exp7/dnn4_pretrain-dbn_dnn_6_1024/final.nnet
+
+[ Stack-Trace: ]
+nnet-copy() [0x66dcaa]
+kaldi::MessageLogger::HandleMessage(kaldi::LogMessageEnvelope const&, char const*)
+kaldi::MessageLogger::~MessageLogger()
+kaldi::Input::Input(std::string const&, bool*)
+main
+__libc_start_main
+nnet-copy() [0x4e1419]
+
+Traceback (most recent call last):
+  File "dnn2dbn.py", line 3, in <module>
+    with open(sys.argv[1], 'r') as theFile:
+IOError: [Errno 2] No such file or directory: 'exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.nnet'
+nnet-copy exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn exp7/dnn4_pretrain-dbn_dnn_6_1024/final.dbn 
+ERROR (nnet-copy[5.4.105~1-4fda]:Input():kaldi-io.cc:756) Error opening input stream exp7/dnn4_pretrain-dbn_dnn_6_1024/final_txt.dbn
+
+[ Stack-Trace: ]
+nnet-copy() [0x66dcaa]
+kaldi::MessageLogger::HandleMessage(kaldi::LogMessageEnvelope const&, char const*)
+kaldi::MessageLogger::~MessageLogger()
+kaldi::Input::Input(std::string const&, bool*)
+main
+__libc_start_main
+nnet-copy() [0x4e1419]
+
+subset_data_dir.sh: no such file exp7/data-fmllr-tri4/train7/utt2spk
+                        Step 10 : finetune dnn4 with only st data                        
+run.pl: job failed, log is in exp7/dnn4_pretrain-dbn_dnn_6_1024_reST/log/train_nnet.log
+
+real	0m1.722s
+user	0m0.048s
+sys	0m0.792s
+steps/nnet/decode.sh --nj 30 --use-gpu yes --cmd run.pl --gpu 1 --mem 20G --config conf/decode_dnn.conf --acwt 0.05 exp7/tri4a/graph_st7.o3g.kn.pr1-7 exp7/data-fmllr-tri4/sharedTask2nd_Test exp7/dnn4_pretrain-dbn_dnn_6_1024_reST/decode_st.test_st7.o3g.kn.pr1-7_acwt0.05
+steps/nnet/decode.sh: missing file exp7/data-fmllr-tri4/sharedTask2nd_Test/split30/1/feats.scp
+
+real	0m0.056s
+user	0m0.016s
+sys	0m0.026s
+steps/diagnostic/analyze_lats.sh --cmd run.pl --mem 20G exp7/tri2a/graph_st7.o3g.kn.pr1-7 exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+steps/diagnostic/analyze_lats.sh: see stats in exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/log/analyze_alignments.log
+Overall, lattice depth (10,50,90-percentile)=(1,2,23) and mean=10.2
+steps/diagnostic/analyze_lats.sh: see stats in exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd run.pl --mem 20G data/sharedTask2nd_test exp7/tri2a/graph_st7.o3g.kn.pr1-7 exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
