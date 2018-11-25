@@ -17,8 +17,8 @@ utils/subset_data_dir.sh data/sharedTask2nd/all 5000 data/sharedTask2nd/train_5k
 # combine these two subsets
 utils/combine_data.sh data/st_ihm_all/train_5S10I data/sharedTask2nd/train_5k data/ihm_s5/train_10k 
 utils/combine_data.sh data/st_ihm_all/train_5S20I data/sharedTask2nd/train_5k data/ihm_s5/train_20k 
-utils/combine_data.sh data/st_ihm_all/train_12S12I data/sharedTask2nd/train data/ihm_s5/train_12k 
-utils/combine_data.sh data/st_ihm_all/train_12S50I data/sharedTask2nd/train data/ihm_s5/train_50k 
-utils/combine_data.sh data/st_ihm_all/train_all data/sharedTask2nd/train data/ihm_s5 
+utils/combine_data.sh data/st_ihm_all/train_12S12I data/sharedTask2nd/all data/ihm_s5/train_12k 
+utils/combine_data.sh data/st_ihm_all/train_12S50I data/sharedTask2nd/all data/ihm_s5/train_50k 
+utils/combine_data.sh data/st_ihm_all/train_all data/sharedTask2nd/all data/ihm_s5/train
 
 
