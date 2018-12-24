@@ -16,3 +16,11 @@ local/nnet3/run_lstm.sh --affix bidirectional \
                         --chunk-left-context 40 \
                         --chunk-right-context 40
 ```
+
+kaldi/egs/wsj/s5/local/nnet3/tuning/run_tdnn_1a.sh
+ This is the standard "tdnn" system, built in nnet3 with xconfigs.
+
+
+ kaldi/egs/ami/s5/local/nnet3/run_lstm.sh
+
+ 

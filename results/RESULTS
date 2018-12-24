@@ -1,113 +1,6 @@
                      ASR Experinments
 ========================================================
-## Experinment Setup (exp5)
-LM: 12K ST12 Data
-Train: 5K ST12 Data + 5K AMI Data
-Test: 1K ST12_Test Data
 
-## TODO 
-
-============================WER MONO============================
-
--------------------------Test WER-------------------------
-[xfu7@c76 s1]$ cat exp5/mono/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 22.12 [ 1191 / 5385, 229 ins, 206 del, 756 sub ] exp5/mono/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/wer_14_0.0
-
-[xfu7@c76 s1]$  cat exp5/tri1/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/wer_20_0.5
-compute-wer --text --mode=present ark:exp5/tri1/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/test_filt.txt ark,p:-
-%WER 31.10 [ 1675 / 5385, 60 ins, 1183 del, 432 sub ]
-%SER 56.00 [ 560 / 1000 ]
-Scored 1000 sentences, 0 not present in hyp.
-
-COMMENT
-The result for monophone stage is too good, and is possible of overfitting
-One possible reason is that the train dataset contain the file in the test dataset
-
-cat exp5/tri1/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
--------Train WER -----------
-[xfu7@c101 s1]$ cat exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 62.65 [ 39049 / 62327, 1601 ins, 16279 del, 21169 sub ] exp5/mono/decode_st_train10k_st5.o3g.kn.pr1-7_acwt0.06/wer_11_0.5
-============================WER TRI1============================
-[xfu7@c76 s1]$ cat exp5/tri1/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 27.87 [ 1501 / 5385, 124 ins, 814 del, 563 sub ] exp5/tri1/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/wer_14_0.0
-
-============================WER TRI2============================
-[xfu7@c76 s1]$ cat exp5/tri2a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 27.39 [ 1475 / 5385, 149 ins, 717 del, 609 sub ] exp5/tri2a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/wer_11_0.0
-
-cat exp5/tri2a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-
-============================WER TRI3============================
-cat exp5/tri3a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-
-[xfu7@c76 s1]$ cat exp5/tri3a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 28.99 [ 1561 / 5385, 108 ins, 950 del, 503 sub ] exp5/tri3a/decode_st.test_st5.o3g.kn.pr1-7_acwt0.06/wer_14_0.
-
-
-======================================================== 
-                           Exp6
-========================================================
-                        Tri1 warnings
-========================================================
-WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 1 with no stats; corresponding phone list: 6 7 8 9 10
-WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 2 with no stats; corresponding phone list: 11 12 13 14 15
-WARNING (gmm-init-model[5.4.105~1-4fda]:InitAmGmm():gmm-init-model.cc:55) Tree has pdf-id 42 with no stats; corresponding phone list: 173 174 175 176
-** The warnings above about 'no stats' generally mean you have phones **
-** (or groups of phones) in your phone set that had no corresponding data. **
-** You should probably figure out whether something went wrong, **
-** or whether your data just doesn't happen to have examples of those **
-** phones. **
-
-[xfu7@c101 s1]$ for item in mono tri1 tri2a tri3a; do cat exp6/$item/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done
-%WER 20.59 [ 1106 / 5372, 234 ins, 241 del, 631 sub ] exp6/mono/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
-%WER 19.27 [ 1035 / 5372, 120 ins, 470 del, 445 sub ] exp6/tri1/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_13_0.0
-%WER 21.35 [ 1147 / 5372, 111 ins, 594 del, 442 sub ] exp6/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_17_0.0
-%WER 23.68 [ 1272 / 5372, 118 ins, 666 del, 488 sub ] exp6/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_15_0.0
-======================================================== 
-                           mono
-========================================================
-[xfu7@c101 s1]$ cat exp6/mono/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 20.59 [ 1106 / 5372, 234 ins, 241 del, 631 sub ] exp6/mono/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
-
-======================================================== 
-                           tri1
-========================================================
-[xfu7@c101 s1]$ cat exp6/tri1/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer
-%WER 19.27 [ 1035 / 5372, 120 ins, 470 del, 445 sub ] exp6/tri1/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_13_0.0
-
-======================================================== 
-                           tri2a
-========================================================
-
-%WER 21.35 [ 1147 / 5372, 111 ins, 594 del, 442 sub ] exp6/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_17_0.0
-======================================================== 
-                           tri3a
-========================================================
-%WER 23.68 [ 1272 / 5372, 118 ins, 666 del, 488 sub ] exp6/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_15_0.0
-======================================================== 
-                           tri4a
-========================================================
-%WER 23.34 [ 1254 / 5372, 117 ins, 639 del, 498 sub ] exp6/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_0.0
-
-
-
-
-======================================================== 
-                           Exp 7
-========================================================
-for item in mono tri1 tri2a tri3a tri4a; do cat exp6/$item/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done
-for item in mono tri1 tri2a tri3a; do cat exp7a/$item/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done
-set='1_st_only' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode_st.test_st${set}.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done
-
- lang_st1_st_only.o3g.kn.pr1-7
-Train: ST12 12K (all) + AMI 12K
-Test: ST12 1K
-
-[xfu7@c77 s1]$ for item in mono tri1 tri2a tri3a; do cat exp7a/$item/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done
-%WER 30.47 [ 1637 / 5372, 195 ins, 480 del, 962 sub ] exp7/mono/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/wer_15_0.5
-%WER 18.13 [ 974 / 5372, 154 ins, 320 del, 500 sub ] exp7/tri1/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/wer_15_0.5
-%WER 16.79 [ 902 / 5372, 190 ins, 233 del, 479 sub ] exp7/tri2a/decode_st.test_st7.o3g.kn.pr1-7_acwt0.06/wer_19_0.0
- 
 
 ======================================================== 
                            Exp1_st_only
@@ -122,22 +15,18 @@ set='5S10I' && for item in mono tri1 tri2a tri3a tri4a; do cat exp${set}/$item/d
 %WER 20.48 [ 1100 / 5372, 133 ins, 520 del, 447 sub ] exp1_st_only/tri2a/decode_st.test_st1_st_only.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
 %WER 22.39 [ 1203 / 5372, 149 ins, 546 del, 508 sub ] exp1_st_only/tri3a/decode_st.test_st1_st_only.o3g.kn.pr1-7_acwt0.06/wer_15_0.0
 %WER 22.60 [ 1214 / 5372, 145 ins, 581 del, 488 sub ] exp1_st_only/tri4a/decode_st.test_st1_st_only.o3g.kn.pr1-7_acwt0.05/wer_15_0.0
-%WER 26.47 [ 1422 / 5372, 110 ins, 801 del, 511 sub ] exp1_st_only/tri4a/decode_st.test_st1_st_only.o3g.kn.pr1-7_acwt0.05.si/wer_17_0.0
 
-for item in train_12S12I  train_12S50I train_5S10I  train_5S20I  train_all; do wc -l $item/text; done
 
+for item in train_12S12I  train_12S30I  train_12S50I  train_12S80I  train_5S10I  train_5S20I  train_all; do wc -l $item/text; done
+
+ 
 24914 train_12S12I/text
+42914 train_12S30I/text
 62914 train_12S50I/text
+92914 train_12S80I/text
 15000 train_5S10I/text
 25000 train_5S20I/text
 121135 train_all/text
-
-24914 train_12S12I/text
-62914 train_12S50I/text
-15000 train_5S10I/text
-25000 train_5S20I/text
-121135 train_all/text
-
 
 The AMI data have the same error segmentation fault.
 Need to verify the data is in correct format.
@@ -200,6 +89,8 @@ set='5S10I' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode_
 %WER 22.92 [ 1231 / 5372, 123 ins, 635 del, 473 sub ] exp5S10I/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
 %WER 23.62 [ 1269 / 5372, 137 ins, 610 del, 522 sub ] exp5S10I/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_15_0.0
 %WER 22.51 [ 1209 / 5372, 125 ins, 542 del, 542 sub ] exp5S10I/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_0.0
+
+
 ======================================================== 
                            Exp 5S20I
 ========================================================
@@ -221,6 +112,16 @@ set='12S12I' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode
 %WER 15.52 [ 834 / 5372, 128 ins, 316 del, 390 sub ] exp12S12I/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_17_0.0
 %WER 15.28 [ 821 / 5372, 128 ins, 299 del, 394 sub ] exp12S12I/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_18_0.0
 %WER 14.50 [ 779 / 5372, 137 ins, 222 del, 420 sub ] exp12S12I/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_17_0.0
+======================================================== 
+                           Exp 12S30I
+========================================================
+set='12S30I' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done && cat exp${set}/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/scoring_kaldi/best_wer
+========================================================
+%WER 23.96 [ 1287 / 5372, 221 ins, 297 del, 769 sub ] exp12S30I/mono/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
+%WER 16.20 [ 870 / 5372, 167 ins, 235 del, 468 sub ] exp12S30I/tri1/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.0
+%WER 15.47 [ 831 / 5372, 145 ins, 256 del, 430 sub ] exp12S30I/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_15_0.5
+%WER 14.97 [ 804 / 5372, 160 ins, 207 del, 437 sub ] exp12S30I/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_14_0.5
+%WER 14.61 [ 785 / 5372, 125 ins, 254 del, 406 sub ] exp12S30I/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_18_0.5
 
 ======================================================== 
                            Exp 12S50I
@@ -232,6 +133,20 @@ set='12S50I' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode
 %WER 15.17 [ 815 / 5372, 168 ins, 185 del, 462 sub ] exp12S50I/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_18_0.5
 %WER 14.80 [ 795 / 5372, 155 ins, 174 del, 466 sub ] exp12S50I/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_19_0.0
 %WER 14.07 [ 756 / 5372, 170 ins, 164 del, 422 sub ] exp12S50I/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_19_0.0
+%WER 9.53 [ 512 / 5372, 133 ins, 91 del, 288 sub ] exp12S50I/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_14_1.0
+
+======================================================== 
+                           Exp 12S80I
+========================================================
+set='12S80I' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/scoring_kaldi/best_wer; done && cat exp${set}/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/scoring_kaldi/best_wer
+========================================================
+%WER 30.40 [ 1633 / 5372, 277 ins, 457 del, 899 sub ] exp12S80I/mono/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_12_0.0
+%WER 16.06 [ 863 / 5372, 157 ins, 246 del, 460 sub ] exp12S80I/tri1/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_13_1.0
+%WER 15.15 [ 814 / 5372, 140 ins, 251 del, 423 sub ] exp12S80I/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_19_0.5
+%WER 15.66 [ 841 / 5372, 175 ins, 211 del, 455 sub ] exp12S80I/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_18_0.0
+%WER 15.41 [ 828 / 5372, 166 ins, 185 del, 477 sub ] exp12S80I/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_19_0.0
+%WER 9.51 [ 511 / 5372, 140 ins, 87 del, 284 sub ] exp12S80I/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_0.5
+%WER 11.76 [ 632 / 5372, 149 ins, 122 del, 361 sub ] exp12S80I/dnn4_pretrain-dbn_dnn_6_1024_reST/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_1.0
 
 ======================================================== 
                            Exp all
@@ -243,5 +158,26 @@ set='all' && for item in mono tri1 tri2a tri3a; do cat exp${set}/$item/decode_st
 %WER 16.59 [ 891 / 5372, 152 ins, 264 del, 475 sub ] expall/tri2a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_14_1.0
 %WER 16.12 [ 866 / 5372, 165 ins, 220 del, 481 sub ] expall/tri3a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.06/wer_16_0.5
 %WER 16.18 [ 869 / 5372, 165 ins, 212 del, 492 sub ] expall/tri4a/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_19_0.0
+%WER 10.61 [ 570 / 5372, 135 ins, 127 del, 308 sub ] expall/dnn4_pretrain-dbn_dnn_6_1024/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_1.0
+%WER 13.46 [ 723 / 5372, 217 ins, 96 del, 410 sub ] expall/dnn4_pretrain-dbn_dnn_6_1024_reST/decode_st.test_st6.o3g.kn.pr1-7_acwt0.05/wer_15_0.5
+======================================================== 
+                           Exp all DNN
+========================================================
+/home/xfu7/kaldi/egs/SpokenCall_Adaptation/s1/expall/data-fmllr-tri4
+for item in sharedTask2nd  sharedTask2nd_Test  trainall  trainall_cv10  trainall_tr90; do wc -l $item/text; done
+
+1000 sharedTask2nd_Test/text
+121135 trainall/text
+13805 trainall_cv10/text
+107330 trainall_tr90/text
 
 
+st_dir=data/sharedTask2nd
+ihm_dir=data/ihm
+dest_dir=data/st_ihm_all
+
+utils/subset_data_dir.sh $ihm_dir/train 30000 $ihm_dir/train_30k
+utils/subset_data_dir.sh $ihm_dir/train 80000 $ihm_dir/train_80k
+
+utils/combine_data.sh $dest_dir/train_all $st_dir/all $ihm_dir/train_30k
+utils/combine_data.sh $dest_dir/train_all $st_dir/all $ihm_dir/train_80k
